@@ -56,7 +56,7 @@ def get_order_qty(customer_name):
     """
     order_qty = 0
     # TODO: Write your code here
-    customer_name = input("Now serving customer: ")
+    # customer_name = input("Now serving customer: ")
     print("Welcome {}!".format(customer_name))
     while True:
         try:
@@ -85,7 +85,15 @@ def get_ice_cream_flavor(ice_cream_flavors):
     """
     flavor_picked = ""
     # TODO: Write your code here
-    ice_cream_flavors = input("Which flavor would you like (v/c/s)? ")
+    flavor_list = ["v", "c", "s"]
+    for i in ice_cream_flavors:
+        question = input("Which flavor would you like (v/c/s)? ")
+        get_first_letter_of_user_input(question)
+        if question is not in flavor_list:
+            continue
+        else:
+            flavor_picked.append(ice_cream_flavors[0])
+
     return flavor_picked
 
 
@@ -166,6 +174,9 @@ def get_first_letter_of_user_input(question):
 
     first_letter = ""
     # TODO: Write your code here
+    question = question.strip()
+    question = question.lower()
+    first_letter = question
     return first_letter
 
 
