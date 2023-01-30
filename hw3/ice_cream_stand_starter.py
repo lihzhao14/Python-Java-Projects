@@ -176,7 +176,8 @@ def get_first_letter_of_user_input(question):
     # TODO: Write your code here
     question = question.strip()
     question = question.lower()
-    first_letter = question
+    first_letter = first_letter.join(question[0])
+    print(first_letter)
     return first_letter
 
 
