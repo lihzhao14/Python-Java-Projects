@@ -85,14 +85,22 @@ def get_ice_cream_flavor(ice_cream_flavors):
     """
     flavor_picked = ""
     # TODO: Write your code here
-    flavor_list = ["v", "c", "s"]
-    for i in ice_cream_flavors:
+    flag = True
+    while flag:
         question = input("Which flavor would you like (v/c/s)? ")
         get_first_letter_of_user_input(question)
-        if question is not in flavor_list:
-            continue
+        if question in ["v", "c", "s", "V", "C", "S"]:
+            if question == "v" or "V":
+                flavor_picked = flavor_picked.join(ice_cream_flavors[0])
+            elif question == "c" or "C":
+                flavor_picked = flavor_picked.join(ice_cream_flavors[1])
+            elif question == "s" or "S":
+                flavor_picked = flavor_picked.join(ice_cream_flavors[2])
+            print(flavor_picked)
+            flag = False
+
         else:
-            flavor_picked.append(ice_cream_flavors[0])
+            print("Input is not a valid flavor.")
 
     return flavor_picked
 
@@ -110,6 +118,22 @@ def get_ice_cream_size(ice_cream_sizes):
     """
     size_picked = ""
     # TODO: Write your code here
+    flag = True
+    while flag:
+        question = input("Which size would you like (s/m/l)? ")
+        get_first_letter_of_user_input(question)
+        if question in ["s", "m", "l", "S", "M", "L"]:
+            if question == "s" or "S":
+                size_picked = size_picked.join(ice_cream_sizes[0])
+            elif question == "m" or "M":
+                size_picked = size_picked.join(ice_cream_sizes[1])
+            elif question == "l" or "L":
+                size_picked = size_picked.join(ice_cream_sizes[2])
+            print(size_picked)
+            flag = False
+
+        else:
+            print("Input is not a valid size.")
     return size_picked
 
 
@@ -177,7 +201,7 @@ def get_first_letter_of_user_input(question):
     question = question.strip()
     question = question.lower()
     first_letter = first_letter.join(question[0])
-    print(first_letter)
+    # print(first_letter)
     return first_letter
 
 
