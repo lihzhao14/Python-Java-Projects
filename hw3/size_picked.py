@@ -16,18 +16,28 @@ def get_first_letter_of_user_input(question):
 
 def get_ice_cream_size(ice_cream_sizes):
     size_picked = ""
+    first_letter_sizes = []
     flag = True
     while flag:
         size_asked = input("Which size would you like (s/m/l)? ")
         first_letter_size = get_first_letter_of_user_input(size_asked)
         for idx in range(len(ice_cream_sizes)):
-            print(get_first_letter_of_user_input(ice_cream_sizes[idx]))
-            if first_letter_size == get_first_letter_of_user_input(ice_cream_sizes[idx]):
-                size_picked.join(ice_cream_sizes[idx])
-                flag = False
-            else:
-                print("Input is not a valid size.")
-                break
+            # print(get_first_letter_of_user_input(ice_cream_sizes[idx]))
+            a = get_first_letter_of_user_input(ice_cream_sizes[idx]
+            first_letter_sizes.append(a)
+
+        index = first_letter_sizes.index(first_letter_size)
+        size_picked.join(ice_cream_sizes[idx])
+        size_picked = ice_cream_prices[index]
+    return
+
+
+        if first_letter_size == get_first_letter_of_user_input(ice_cream_sizes[idx]):
+            size_picked.join(ice_cream_sizes[idx])
+            flag = False
+        else:
+            print("Input is not a valid size.")
+            break
     return size_picked
 
 

@@ -18,6 +18,7 @@ Topics Covered:
 
 # import statements
 from random import randint, choice
+import random
 
 
 def print_welcome_and_menu(list_of_flavors, list_of_sizes, list_of_prices):
@@ -143,7 +144,15 @@ def get_ice_cream_order_price(ice_cream_size, ice_cream_prices, ice_cream_sizes)
     Returns: The equivalent price of an ice cream size. Example: Returns 4.99 if ice_cream_size is 'Small'
     """
     # TODO: Write your code here
-    return 0
+
+    index = ice_cream_sizes.index(ice_cream_size)
+    return ice_cream_prices[index]
+
+    # Another way:
+    # for idx in range(len(ice_cream_sizes)):
+    #     if ice_cream_sizes[idx] == ice_cream_prices[idx]:
+    #         if ice_cream_size in ice_cream_sizes:
+    #             return ice_cream_prices[idx]
 
 
 def take_customer_order(customer_name, ice_cream_flavors, ice_cream_sizes, ice_cream_prices):
@@ -159,31 +168,41 @@ def take_customer_order(customer_name, ice_cream_flavors, ice_cream_sizes, ice_c
     total_bill = 0
 
     # TODO: Print a message "Now serving customer: X" where X is the current customer's name
+    print("Now serving customer: {}".format(customer_name))
 
     # TODO: Call the get_order_qty and save the value to order_qty
     order_qty = 0
+    order_qty = get_order_qty(customer_name)
 
     # TODO: For Each order you need to get a flavor, and size
     for order in range(order_qty):
         print("Order No.:", order + 1)
         # TODO: Write code to get the ice cream flavor for this order
-
+        flavor_picked = get_ice_cream_flavor(ice_cream_flavors)
         # TODO: Write code to get the ice cream size for this order
-
+        size_picked = get_ice_cream_size(ice_cream_sizes)
         # TODO: Write code to get the price for this order
-
+        price_of_order = get_ice_cream_order_price(size_picked, ice_cream_prices, ice_cream_sizes)
         # TODO: Update the total_bill
-
+        total_bill += price_of_order
         # TODO: Print the details for this order
         #   Hint: See https://www.w3schools.com/python/python_string_formatting.asp for string formatting examples on rounding to 2 decimal places
-
+        print("You ordered a {} {} for ${:.2f}".format(size_picked, flavor_picked, price_of_order))
         pass  # TODO: Remove the pass statement once you have your code written
 
     # TODO: Print the customer's total_bill
-
+    print("Your total bill is: ${}".format(total_bill))
     # TODO: Once orders are all taken, the customer should be asked if they still want to Pay or Cancel
     #  "Would you like to pay or cancel the order (p/c)? "
     #   Hint: Use the get_first_letter_of_user_input() Re-prompt if answer does not start with 'p' or 'c'
+    payment = True
+    while payment:
+        pay_or_cancel = input("Would you like to pay or cancel the order (p/c)?")
+        pay_or_cancel = get_first_letter_of_user_input(pay_or_cancel)
+        if pay_or_cancel != "p" or "c":
+            print("try again")
+            payment = True
+        payment = False
 
     return total_bill
 
@@ -212,6 +231,8 @@ def are_all_customers_served(customer_queue_length):
     Returns: True or False
     """
     # TODO: Write your code here
+    if customer_queue_length == 0:
+        return True
     return False
 
 
@@ -222,7 +243,8 @@ def print_current_status(customers_served, tracking_revenue):
     No Return, only print statements
     """
     # TODO: Write your code here
-    pass  # TODO: Remove the pass statement once you have your code written
+    print("{} customers have been served.".format(customers_served))
+    print("Total Sales of the ice cream stand: ${:.2f}".format(tracking_revenue))
 
 
 def print_sales_summary(customers_served, tracking_revenue):
@@ -236,7 +258,8 @@ def print_sales_summary(customers_served, tracking_revenue):
     No Return, only print statements
     """
     # TODO: Write your code here
-    pass  # TODO: Remove the pass statement once you have your code written
+    print("Total customers served: {}".format(customers_served))
+    print("Total sales           : ${:.2f}".format(tracking_revenue))
 
 
 def random_queue_length():
@@ -246,7 +269,9 @@ def random_queue_length():
     Hint: See https://www.w3schools.com/python/ref_random_randint.asp
     Returns: The resulting random integer.
     """
-    return 0
+    random_number = random.randint(2, 5)
+    return random_number
+    # return 0
 
 
 def main():
@@ -283,12 +308,19 @@ def main():
 
         # TODO: Call the random_queue_length function and save the result to num_of_customers_in_queue
         num_of_customers_in_queue = 0
+        num_of_customers_in_queue = random_queue_length()
 
         # TODO: Print how many customers are in the queue
+        print("There are {} customers in the queue.".format(num_of_customers_in_queue))
 
         # TODO: Call the imported choice function to generate a random name from customer_names.
-        #   Then, append each name to the end of the customers_in_queue list.
-        #   The total number of customer names added should be equal to num_of_customers_in_queue
+        # The total number of customer names added should be equal to num_of_customers_in_queue
+        for num in range(num_of_customers_in_queue):
+            random_customer_name = []
+            random_customer_name = random.choice(customer_names)
+            # Append each name to the end of the customers_in_queue list.
+            customers_in_queue.append(random_customer_name)
+
         #   Hint: See https://www.w3schools.com/python/ref_random_choice.asp
         #   Note: It is OK to have duplicate names in the queue.
 
@@ -298,23 +330,38 @@ def main():
             #  After extraction, the customer should now be removed from the customers_in_queue list.
             #  Hint: Use the pop function with an index argument
             current_customer_name = ""
+            current_customer_name.join(customers_in_queue[0])
+            customers_in_queue.pop(0)
 
             # TODO: Take a customer at the window and update the revenue by calling the take_customer_order function
-
+            tracking_revenue = take_customer_order(current_customer_name, ice_cream_flavors, ice_cream_sizes, ice_cream_prices)
             # TODO: Update the customers_served variable
-
+            customers_served += 1
             # TODO: Call the print_current_status
-
+            print_current_status(customers_served, tracking_revenue)
             # TODO: Call the are_all_customers_served(customer_queue_length) function to check if there are any more
             #  customers in the queue.
             #  If False, continue the loop.
             #  If True, call the print_sales_summary(customers_served, tracking_revenue) and close the queue
-            pass  # TODO: Remove the pass statement once you have your code written
+            if not are_all_customers_served((num_of_customers_in_queue - customers_served)):
+                continue
+            else:
+                print_sales_summary(customers_served, tracking_revenue)
+                queue_is_open = False
 
         # TODO: Ask if you want to open the ice cream stand again "Do you want to open again (y/n)? "
         #  Hint: Use the get_first_letter_of_user_input function
         #  Update the program_running variable if you get a valid answer either 'y' or 'n'
         #  Otherwise, re-prompt until a valid answer is given
+        while True:
+            open_again = input("Do you want to open again (y/n)? ")
+            first_letter_open_again = get_first_letter_of_user_input(open_again)
+            if first_letter_open_again == "y":
+                program_running = True
+            elif first_letter_open_again == "n":
+                program_running = False
+            else:
+                continue
 
 
 if __name__ == '__main__':
