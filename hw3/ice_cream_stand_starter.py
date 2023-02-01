@@ -37,14 +37,15 @@ def print_welcome_and_menu(list_of_flavors, list_of_sizes, list_of_prices):
 
     print("Welcome to Penn's Student Run Ice Cream Stand! ")
     print("Our current flavors for today are:")
-    for f in list_of_flavors:
-        print(f)
+    for flavor in list_of_flavors:
+        print(flavor)
 
     print("")
-    p = 0
-    for s in list_of_sizes:
-        print("Our {} ice cream is ${}".format(s, list_of_prices[p]))
-        p += 1
+
+    for idx in range(len(list_of_sizes)):
+        print("Our {} ice cream is ${}".format(list_of_sizes[idx], list_of_prices[idx]))
+
+    print("")
 
 
 def get_order_qty(customer_name):
@@ -88,20 +89,12 @@ def get_ice_cream_flavor(ice_cream_flavors):
     # TODO: Write your code here
     flag = True
     while flag:
-        question = input("Which flavor would you like (v/c/s)? ")
-        get_first_letter_of_user_input(question)
-        if question in ["v", "c", "s", "V", "C", "S"]:
-            if question == "v" or "V":
-                flavor_picked = flavor_picked.join(ice_cream_flavors[0])
-            elif question == "c" or "C":
-                flavor_picked = flavor_picked.join(ice_cream_flavors[1])
-            elif question == "s" or "S":
-                flavor_picked = flavor_picked.join(ice_cream_flavors[2])
-            print(flavor_picked)
-            flag = False
-
-        else:
-            print("Input is not a valid flavor.")
+        flavor_asked = input("Which flavor would you like (v/c/s)? ")
+        first_letter_flavor = get_first_letter_of_user_input(flavor_asked)
+        for idx in range(len(ice_cream_flavors)):
+            if first_letter_flavor == get_first_letter_of_user_input(ice_cream_flavors[idx]):
+                flavor_picked += ice_cream_flavors[idx]
+                flag = False
 
     return flavor_picked
 
@@ -121,20 +114,13 @@ def get_ice_cream_size(ice_cream_sizes):
     # TODO: Write your code here
     flag = True
     while flag:
-        question = input("Which size would you like (s/m/l)? ")
-        get_first_letter_of_user_input(question)
-        if question in ["s", "m", "l", "S", "M", "L"]:
-            if question == "s" or "S":
-                size_picked = size_picked.join(ice_cream_sizes[0])
-            elif question == "m" or "M":
-                size_picked = size_picked.join(ice_cream_sizes[1])
-            elif question == "l" or "L":
-                size_picked = size_picked.join(ice_cream_sizes[2])
-            print(size_picked)
-            flag = False
+        size_asked = input("Which size would you like (s/m/l)? ")
+        first_letter_size = get_first_letter_of_user_input(size_asked)
+        for idx in range(len(ice_cream_sizes)):
+            if first_letter_size == get_first_letter_of_user_input(ice_cream_sizes[idx]):
+                size_picked += ice_cream_sizes[idx]
+                flag = False
 
-        else:
-            print("Input is not a valid size.")
     return size_picked
 
 
@@ -195,14 +181,12 @@ def take_customer_order(customer_name, ice_cream_flavors, ice_cream_sizes, ice_c
     # TODO: Once orders are all taken, the customer should be asked if they still want to Pay or Cancel
     #  "Would you like to pay or cancel the order (p/c)? "
     #   Hint: Use the get_first_letter_of_user_input() Re-prompt if answer does not start with 'p' or 'c'
-    payment = True
-    while payment:
+    process = True
+    while process:
         pay_or_cancel = input("Would you like to pay or cancel the order (p/c)?")
-        pay_or_cancel = get_first_letter_of_user_input(pay_or_cancel)
-        if pay_or_cancel != "p" or "c":
-            print("try again")
-            payment = True
-        payment = False
+        first_letter_pay_or_cancel = get_first_letter_of_user_input(pay_or_cancel)
+        if first_letter_pay_or_cancel == "p" or "c":
+            process = False
 
     return total_bill
 
@@ -243,8 +227,7 @@ def print_current_status(customers_served, tracking_revenue):
     No Return, only print statements
     """
     # TODO: Write your code here
-    print("{} customers have been served.".format(customers_served))
-    print("Total Sales of the ice cream stand: ${:.2f}".format(tracking_revenue))
+    print("{} customer(s) have been served and received ${:.2f} in revenue".format(customers_served, tracking_revenue))
 
 
 def print_sales_summary(customers_served, tracking_revenue):
@@ -311,7 +294,7 @@ def main():
         num_of_customers_in_queue = random_queue_length()
 
         # TODO: Print how many customers are in the queue
-        print("There are {} customers in the queue.".format(num_of_customers_in_queue))
+        print("Num of customers in queue: {}\n".format(num_of_customers_in_queue))
 
         # TODO: Call the imported choice function to generate a random name from customer_names.
         # The total number of customer names added should be equal to num_of_customers_in_queue
@@ -330,7 +313,7 @@ def main():
             #  After extraction, the customer should now be removed from the customers_in_queue list.
             #  Hint: Use the pop function with an index argument
             current_customer_name = ""
-            current_customer_name.join(customers_in_queue[0])
+            current_customer_name += customers_in_queue[0]
             customers_in_queue.pop(0)
 
             # TODO: Take a customer at the window and update the revenue by calling the take_customer_order function
