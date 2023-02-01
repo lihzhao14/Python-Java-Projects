@@ -187,7 +187,7 @@ def take_customer_order(customer_name, ice_cream_flavors, ice_cream_sizes, ice_c
         if first_letter_pay_or_cancel == "p":
             process = False
         elif first_letter_pay_or_cancel == "c":
-            total_bill -= price_of_order
+            total_bill = 0
             process = False
 
     return total_bill
@@ -319,7 +319,9 @@ def main():
             customers_in_queue.pop(0)
 
             # TODO: Take a customer at the window and update the revenue by calling the take_customer_order function
-            tracking_revenue = take_customer_order(current_customer_name, ice_cream_flavors, ice_cream_sizes, ice_cream_prices)
+            this_revenue = take_customer_order(current_customer_name, ice_cream_flavors, ice_cream_sizes, ice_cream_prices)
+
+            tracking_revenue += this_revenue
             # TODO: Update the customers_served variable
             customers_served += 1
             # TODO: Call the print_current_status
