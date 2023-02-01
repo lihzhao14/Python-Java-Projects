@@ -35,7 +35,7 @@ def print_welcome_and_menu(list_of_flavors, list_of_sizes, list_of_prices):
     # list_of_sizes = ["Small", "Medium", "Large"]
     # list_of_prices = [4.99, 7.49, 8.49]
 
-    print("Welcome to Penn's Student Run Ice Cream Stand! ")
+    print("Welcome to Penn's Student Run Ice Cream Stand!\n")
     print("Our current flavors for today are:")
     for flavor in list_of_flavors:
         print(flavor)
@@ -66,10 +66,10 @@ def get_order_qty(customer_name):
             if order_qty in range(1, 6, 1):
                 break
             else:
-                print("Wrong Input! Input is not in [1,5]")
+                print("Please enter a valid integer in [1,5]")
                 continue
         except ValueError:
-            print("Wrong Input! Input is not an integer")
+            print("Please enter a valid integer")
             continue
     return order_qty
 
@@ -174,10 +174,9 @@ def take_customer_order(customer_name, ice_cream_flavors, ice_cream_sizes, ice_c
         # TODO: Print the details for this order
         #   Hint: See https://www.w3schools.com/python/python_string_formatting.asp for string formatting examples on rounding to 2 decimal places
         print("You ordered a {} {} for ${:.2f}".format(size_picked, flavor_picked, price_of_order))
-        pass  # TODO: Remove the pass statement once you have your code written
 
     # TODO: Print the customer's total_bill
-    print("Your total bill is: ${}".format(total_bill))
+    print("Your total bill is: ${}".format(total_bill, 2))
     # TODO: Once orders are all taken, the customer should be asked if they still want to Pay or Cancel
     #  "Would you like to pay or cancel the order (p/c)? "
     #   Hint: Use the get_first_letter_of_user_input() Re-prompt if answer does not start with 'p' or 'c'
@@ -185,7 +184,10 @@ def take_customer_order(customer_name, ice_cream_flavors, ice_cream_sizes, ice_c
     while process:
         pay_or_cancel = input("Would you like to pay or cancel the order (p/c)?")
         first_letter_pay_or_cancel = get_first_letter_of_user_input(pay_or_cancel)
-        if first_letter_pay_or_cancel == "p" or "c":
+        if first_letter_pay_or_cancel == "p":
+            process = False
+        elif first_letter_pay_or_cancel == "c":
+            total_bill -= price_of_order
             process = False
 
     return total_bill
@@ -198,13 +200,13 @@ def get_first_letter_of_user_input(question):
     Hint: Use the strip() and lower() functions
     Returns: The first letter of the input the user provides. Ask again if the input is empty.
     """
-
     first_letter = ""
     # TODO: Write your code here
     question = question.strip()
     question = question.lower()
-    first_letter = first_letter.join(question[0])
-    # print(first_letter)
+    if question == "":
+        question = "empty"
+    first_letter = question[0]
     return first_letter
 
 
@@ -336,15 +338,16 @@ def main():
         #  Hint: Use the get_first_letter_of_user_input function
         #  Update the program_running variable if you get a valid answer either 'y' or 'n'
         #  Otherwise, re-prompt until a valid answer is given
-        while True:
+        open_or_close = True
+        while open_or_close:
             open_again = input("Do you want to open again (y/n)? ")
             first_letter_open_again = get_first_letter_of_user_input(open_again)
             if first_letter_open_again == "y":
                 program_running = True
+                open_or_close = False
             elif first_letter_open_again == "n":
                 program_running = False
-            else:
-                continue
+                open_or_close = False
 
 
 if __name__ == '__main__':
