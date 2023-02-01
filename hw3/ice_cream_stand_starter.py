@@ -17,7 +17,7 @@ Topics Covered:
 # Resources used outside course materials:
 
 # import statements
-from random import randint, choice
+# from random import randint, choice
 import random
 
 
@@ -58,7 +58,6 @@ def get_order_qty(customer_name):
     """
     order_qty = 0
     # TODO: Write your code here
-    # customer_name = input("Now serving customer: ")
     print("Welcome {}!".format(customer_name))
     while True:
         try:
@@ -67,10 +66,10 @@ def get_order_qty(customer_name):
                 break
             else:
                 print("Please enter a valid integer in [1,5]")
-                continue
+                # continue
         except ValueError:
             print("Please enter a valid integer")
-            continue
+            # continue
     return order_qty
 
 
@@ -133,12 +132,6 @@ def get_ice_cream_order_price(ice_cream_size, ice_cream_prices, ice_cream_sizes)
 
     index = ice_cream_sizes.index(ice_cream_size)
     return ice_cream_prices[index]
-
-    # Another way:
-    # for idx in range(len(ice_cream_sizes)):
-    #     if ice_cream_sizes[idx] == ice_cream_prices[idx]:
-    #         if ice_cream_size in ice_cream_sizes:
-    #             return ice_cream_prices[idx]
 
 
 def take_customer_order(customer_name, ice_cream_flavors, ice_cream_sizes, ice_cream_prices):
@@ -206,7 +199,7 @@ def get_first_letter_of_user_input(question):
     question = question.lower()
     if question == "":
         question = "empty"
-    first_letter = question[0]
+    first_letter += question[0]
     return first_letter
 
 
@@ -229,7 +222,8 @@ def print_current_status(customers_served, tracking_revenue):
     No Return, only print statements
     """
     # TODO: Write your code here
-    print("{} customer(s) have been served and received ${:.2f} in revenue".format(customers_served, tracking_revenue))
+    print("")
+    print("We have now served {} customer(s) and received ${:.2f} in revenue\n".format(customers_served, tracking_revenue))
 
 
 def print_sales_summary(customers_served, tracking_revenue):
@@ -319,9 +313,9 @@ def main():
             customers_in_queue.pop(0)
 
             # TODO: Take a customer at the window and update the revenue by calling the take_customer_order function
-            this_revenue = take_customer_order(current_customer_name, ice_cream_flavors, ice_cream_sizes, ice_cream_prices)
-
-            tracking_revenue += this_revenue
+            current_revenue = take_customer_order(current_customer_name, ice_cream_flavors, ice_cream_sizes, ice_cream_prices)
+            # Tracking the total revenue
+            tracking_revenue += current_revenue
             # TODO: Update the customers_served variable
             customers_served += 1
             # TODO: Call the print_current_status
@@ -330,11 +324,12 @@ def main():
             #  customers in the queue.
             #  If False, continue the loop.
             #  If True, call the print_sales_summary(customers_served, tracking_revenue) and close the queue
-            if not are_all_customers_served((num_of_customers_in_queue - customers_served)):
-                continue
-            else:
+            if are_all_customers_served((num_of_customers_in_queue - customers_served)):
                 print_sales_summary(customers_served, tracking_revenue)
                 queue_is_open = False
+
+            # else:
+            #     continue
 
         # TODO: Ask if you want to open the ice cream stand again "Do you want to open again (y/n)? "
         #  Hint: Use the get_first_letter_of_user_input function
