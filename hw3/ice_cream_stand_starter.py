@@ -14,7 +14,8 @@ Topics Covered:
 # Student Name in Canvas: Lihong Zhao
 # Penn ID: 51007389
 # Did you do this homework on your own (yes / no): yes
-# Resources used outside course materials:
+# Resources used outside course materials: None
+# Statement: I admit that this assignment was done by me alone without help.
 
 # import statements
 # from random import randint, choice
@@ -92,7 +93,7 @@ def get_ice_cream_flavor(ice_cream_flavors):
         first_letter_flavor = get_first_letter_of_user_input(flavor_asked)
         for idx in range(len(ice_cream_flavors)):
             if first_letter_flavor == get_first_letter_of_user_input(ice_cream_flavors[idx]):
-                flavor_picked += ice_cream_flavors[idx]
+                flavor_picked = ice_cream_flavors[idx]
                 flag = False
 
     return flavor_picked
@@ -150,7 +151,6 @@ def take_customer_order(customer_name, ice_cream_flavors, ice_cream_sizes, ice_c
     print("Now serving customer: {}".format(customer_name))
 
     # TODO: Call the get_order_qty and save the value to order_qty
-    order_qty = 0
     order_qty = get_order_qty(customer_name)
 
     # TODO: For Each order you need to get a flavor, and size
@@ -250,7 +250,6 @@ def random_queue_length():
     """
     random_number = random.randint(2, 5)
     return random_number
-    # return 0
 
 
 def main():
@@ -286,7 +285,7 @@ def main():
         customers_served = 0
 
         # TODO: Call the random_queue_length function and save the result to num_of_customers_in_queue
-        num_of_customers_in_queue = 0
+        # num_of_customers_in_queue = 0
         num_of_customers_in_queue = random_queue_length()
 
         # TODO: Print how many customers are in the queue
@@ -295,7 +294,7 @@ def main():
         # TODO: Call the imported choice function to generate a random name from customer_names.
         # The total number of customer names added should be equal to num_of_customers_in_queue
         for num in range(num_of_customers_in_queue):
-            random_customer_name = []
+            # random_customer_name = []
             random_customer_name = random.choice(customer_names)
             # Append each name to the end of the customers_in_queue list.
             customers_in_queue.append(random_customer_name)
@@ -313,7 +312,8 @@ def main():
             customers_in_queue.pop(0)
 
             # TODO: Take a customer at the window and update the revenue by calling the take_customer_order function
-            current_revenue = take_customer_order(current_customer_name, ice_cream_flavors, ice_cream_sizes, ice_cream_prices)
+            current_revenue = take_customer_order(current_customer_name, ice_cream_flavors, ice_cream_sizes,
+                                                  ice_cream_prices)
             # Tracking the total revenue
             tracking_revenue += current_revenue
             # TODO: Update the customers_served variable
