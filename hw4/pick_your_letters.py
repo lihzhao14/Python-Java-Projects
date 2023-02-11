@@ -27,14 +27,14 @@ def ask_for_length():
     #       3. Returns the number of hand cards L
     while True:
         try:
-            num_of_hand_cards = int(input("Number of hand cards:"))
-            if num_of_hand_cards in range(3, 11):
+            length_of_word = int(input("Input the length of the word:"))
+            if length_of_word in range(3, 11):
                 break
             else:
                 print("Please enter a valid integer in [3, 10]")
         except ValueError:
             print("Please enter a valid integer")
-    return num_of_hand_cards
+    return length_of_word
 
 
 def filter_word_list(all_words, length):
@@ -48,9 +48,10 @@ def filter_word_list(all_words, length):
     #       2. Parameter all_words is the list of all words
     #       3. Parameter length is the given length
     random_word_list = []
-    for i in range(length):
+    while len(random_word_list) <= length:
         random_word = random.choice(all_words)
-        random_word_list.append(random_word)
+        if len(random_word) == length:
+            random_word_list.append(random_word)
     return random_word_list
 
 
