@@ -47,12 +47,12 @@ def filter_word_list(all_words, length):
     # TODO: 1. Given a list of words, and a number, returns a list of words with the specific length
     #       2. Parameter all_words is the list of all words
     #       3. Parameter length is the given length
-    random_word_list = []
-    while len(random_word_list) < length:
-        random_word = random.choice(all_words)
-        if len(random_word) == length:
-            random_word_list.append(random_word)
-    return random_word_list
+    word_list_specific_length = []
+    for idx in range(len(all_words)):
+        if len(all_words[idx]) == length:
+            word_list_specific_length.append(all_words[idx])
+            print(all_words[idx])
+    return word_list_specific_length
 
 
 def set_up(length):
@@ -126,7 +126,7 @@ def deal_initial_cards(main_pile, discard_pile, length):
         human_hand.append(human_word)
     top_card = get_first_from_pile_and_remove(main_pile)
     discard_pile.insert(0, top_card)
-    return computer_hand, human_hand
+    return human_hand, computer_hand
 
 
 def check_bricks(main_pile, discard_pile):
@@ -140,8 +140,10 @@ def check_bricks(main_pile, discard_pile):
 
     if not main_pile:
         shuffle_cards(discard_pile)
-        main_pile = copy.deepcopy(discard_pile)
-        discard_pile = []
+        # main_pile = copy.deepcopy(discard_pile)
+        main_pile[:] = discard_pile.copy()  # deepcopy是copy全新的内容到新的地址上；
+                                            # copy是copy全新的内容到原来的地址上
+        discard_pile.clear()
         # turn over the top card of the main_pile to be the start of the new discard_pile.
         top_card = get_first_from_pile_and_remove(main_pile)
         discard_pile.insert(0, top_card)
@@ -209,6 +211,16 @@ def check_game_over(human_hand_cards, computer_hand_cards, words_with_specific_l
     Returns True if the human or the computer wins the game, otherwise False
     """
     # TODO
+    human_hand_cards_str = "".join(human_hand_cards)
+    computer_hand_cards_str = "".join(computer_hand_cards)
+    if human_hand_cards_str in words_with_specific_length:
+        return True
+    elif computer_hand_cards_str in words_with_specific_length:
+        return True
+    elif human_hand_cards_str in words_with_specific_length and computer_hand_cards_str in words_with_specific_length:
+        return True
+    else:
+        return False
 
 
 def main():
@@ -226,26 +238,32 @@ def main():
 
     # set up main_pile and discard_pile
     # TODO
+    main_pile, discard_pile = set_up(length)
 
     # shuffle main pile
     # TODO
+    shuffle_cards(main_pile)
 
     # deal cards to players, creating human_hand_cards and computer_hand_cards
     # and initialize discard pile
     # TODO
+    human_hand, computer_hand = deal_initial_cards(main_pile, discard_pile, length)
 
     # start the game
     while True:
         # check if main_pile is empty by calling check_bricks(main_pile, discard_pile)
-        
+        check_bricks(main_pile, discard_pile)
         # computer play goes here
         # TODO
-
+        computer_play(computer_hand, computer_target_list, main_pile, discard_pile)
         # human play goes here
         # TODO
-
+        #少一个
+        ask_for_the_letter_to_be_replaced(length)
+        ask_yes_or_no(msg)
         # check if game is over and print out results
         # TODO
+        check_game_over(human_hand_cards, computer_hand_cards, words_with_specific_length)
         pass
 
 if __name__ == "__main__":

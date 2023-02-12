@@ -23,10 +23,11 @@ def computer_play(computer_hand_cards, computer_target_list, main_pile, discard_
 
     # Evaluate the usefulness of cards in computer's hand
     computer_hand_usefulness = [0] * (len(computer_hand_cards) - 1)
-    for index, card in enumerate(computer_hand_cards):
+    # for index, card in enumerate(computer_hand_cards[:4]):
+    for idx in range(len(computer_hand_cards[:(len(computer_hand_cards) - 1)])):
         for target_word in computer_target_list:
-            if card in target_word:
-                computer_hand_usefulness[index] += 1
+            if computer_hand_cards[idx] in target_word:
+                computer_hand_usefulness[idx] += 1
 
     # Evaluate the usefulness of the new card and determine its position in the hand
     new_card = computer_hand_cards[-1]

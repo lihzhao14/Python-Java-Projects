@@ -1,8 +1,6 @@
 def computer_play(computer_hand_cards, computer_target_list, main_pile, discard_pile):
     # TODO: 1. Determine if the top card of the discard pile or the top card of the main pile is more useful to the
     #       computer.
-    #       判断弃牌堆的top card有没有用
-    #       没有用就从主牌堆抽卡
     #       2. Evaluate the usefulness of each card based on the current contents of the computer's hand cards
     #       and target list of words.
     #       3. Decide whether to take the top card from the discard pile or from the top of the main pile.

@@ -41,15 +41,16 @@ def get_first_from_pile_and_remove(pile):
     return top_card
 
 
-def main(main_pile, discard_pile):
-    # discard_pile, main_pile = set_up(7)
-    # copy_of_shuffled_discard = discard_pile.copy()
+def main():
+    discard_pile, main_pile = set_up(7)
+    copy_of_shuffled_discard = discard_pile.copy()
     # print(main_pile)
     # print(discard_pile)
     if not main_pile:
         shuffle_cards(discard_pile)
+        # main_pile[:] = discard_pile.copy()
         main_pile = copy.deepcopy(discard_pile)
-        # print(len(main_pile))
+        print(len(main_pile))
         discard_pile = []
         # print(main_pile)
         # print(discard_pile)
@@ -62,7 +63,7 @@ def main(main_pile, discard_pile):
     print(len(discard_pile))
     print(7 * 26 - 1 == len(main_pile))
     print(1 == len(discard_pile))
-    # print(set(copy_of_shuffled_discard) == set(main_pile + discard_pile))
+    print(set(copy_of_shuffled_discard) == set(main_pile + discard_pile))
 
 
 if __name__ == "__main__":
