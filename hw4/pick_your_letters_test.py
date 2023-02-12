@@ -94,7 +94,7 @@ class PickYourLetters_Test(unittest.TestCase):
         self.assertEqual(copy_of_main[1:], main_pile)
 
     def test_check_bricks(self):
-        # here, we use the set_up(length) function as a helper function
+        # Here, we use the set_up(length) function as a helper function
         # to get an empty list and one non-empty list
         discard_pile, main_pile = set_up(7)
         copy_of_shuffled_discard = discard_pile.copy()

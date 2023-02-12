@@ -48,7 +48,7 @@ def filter_word_list(all_words, length):
     #       2. Parameter all_words is the list of all words
     #       3. Parameter length is the given length
     random_word_list = []
-    while len(random_word_list) <= length:
+    while len(random_word_list) < length:
         random_word = random.choice(all_words)
         if len(random_word) == length:
             random_word_list.append(random_word)
@@ -100,10 +100,10 @@ def get_first_from_pile_and_remove(pile):
     Return first card of the pile: first_card
     """
     # TODO
-    first_card = pile[0]
+    top_card = pile[0]
     # remove the first item of the given list
     pile.pop(0)
-    return first_card
+    return top_card
 
 
 def deal_initial_cards(main_pile, discard_pile, length):
@@ -138,9 +138,10 @@ def check_bricks(main_pile, discard_pile):
     Return nothing.
     """
 
-    if main_pile == "":
+    if not main_pile:
         shuffle_cards(discard_pile)
         main_pile = copy.deepcopy(discard_pile)
+        discard_pile = []
         # turn over the top card of the main_pile to be the start of the new discard_pile.
         top_card = get_first_from_pile_and_remove(main_pile)
         discard_pile.insert(0, top_card)
@@ -165,21 +166,47 @@ def computer_play(computer_hand_cards, computer_target_list, main_pile, discard_
 
 def ask_for_the_letter_to_be_replaced(length):
     """
-
+    Ask for the index of the letter that the user wants to replace
+    Parameter length is the number of cards in the human’s hand
+    Returns the index of the letter to be replaced
     """
-    # TODO
+
+    while True:
+        try:
+            index = int(input("Which the position of the letter you want to replace?"))
+            # Do not include its own index
+            if index in range(0, length):
+                break
+            else:
+                print("Please enter a valid integer in [0, {}]".format(length))
+        except ValueError:
+            print("Please enter a valid integer")
+    return index
 
 
 def ask_yes_or_no(msg):
     """
-
+    Parameter msg is the message to display
+    Prompt again if the input is invalid
+    Returns True if the user answers ‘y’ or ‘yes’, and returns False if the user answers ‘n’ or ‘no’
     """
-    # TODO
+    print(msg)
+    while True:
+        answer = input("Yes (y) or No (y): ")
+        if answer == "y" or "yes":
+            return True
+        elif answer == "n" or "no":
+            return False
 
 
 def check_game_over(human_hand_cards, computer_hand_cards, words_with_specific_length):
     """
-
+    Check if the game ends
+    If there is a tie, the game ends as well
+    Parameter human_hand_cards is the human’s current hand (list)
+    Parameter computer_hand_cards is the computer’s current hand (list)
+    Parameter words_with_specific_length is a list containing all the words with the specific length
+    Returns True if the human or the computer wins the game, otherwise False
     """
     # TODO
 
