@@ -1,4 +1,18 @@
 def computer_play(computer_hand_cards, computer_target_list, main_pile, discard_pile):
+
+    # Select which word is going to be guessed
+    match_computer_hand_list = [0] * len(computer_hand_cards)
+    for idx_target, target_word in computer_target_list:
+        # change selected target word to be a list
+        list_target_word = list(target_word)
+        for idx in range(len(computer_hand_cards)):
+            # Compare each char in target word with each letter in computer hand
+            if list_target_word[idx] == computer_hand_cards[idx]:
+                match_computer_hand_list[idx_target] += 1
+    max_match = max(match_computer_hand_list)
+    max_index = match_computer_hand_list.index(max_match)
+    selected_target_word = computer_target_list[max_index]
+
     # Evaluate the usefulness of the top card in the main pile
     main_pile_top_card = main_pile[0]
     main_pile_usefulness = 0
@@ -23,10 +37,9 @@ def computer_play(computer_hand_cards, computer_target_list, main_pile, discard_
 
     # Evaluate the usefulness of cards in computer's hand
     computer_hand_usefulness = [0] * (len(computer_hand_cards) - 1)
-    # for index, card in enumerate(computer_hand_cards[:4]):
+    #
     for idx in range(len(computer_hand_cards[:(len(computer_hand_cards) - 1)])):
-        for target_word in computer_target_list:
-            if computer_hand_cards[idx] in target_word:
+            if computer_hand_cards[idx] in selected_target_word:
                 computer_hand_usefulness[idx] += 1
 
     # Evaluate the usefulness of the new card and determine its position in the hand

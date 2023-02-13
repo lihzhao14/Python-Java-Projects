@@ -162,6 +162,21 @@ def computer_play(computer_hand_cards, computer_target_list, main_pile, discard_
     This function doesn’t return anything
     """
 
+    # Select which word is going to be guessed
+    match_computer_hand_list = [0] * len(computer_hand_cards)
+    for idx_target, target_word in enumerate(computer_target_list):
+        # change selected target word to be a list
+        list_target_word = list(target_word)
+        for idx in range(len(computer_hand_cards)):
+            # Compare each char in target word with each letter in computer hand
+            if list_target_word[idx] == computer_hand_cards[idx]:
+                match_computer_hand_list[idx_target] += 1
+    max_match = max(match_computer_hand_list)
+    max_index = match_computer_hand_list.index(max_match)
+    selected_target_word = computer_target_list[max_index]
+    # change the selected word to be a list
+    list_selected_target_word = list(selected_target_word)
+
     # Evaluate the usefulness of the top card in the main pile
     main_pile_top_card = main_pile[0]
     main_pile_usefulness = 0
@@ -189,23 +204,25 @@ def computer_play(computer_hand_cards, computer_target_list, main_pile, discard_
 
     # Evaluate the usefulness of cards in computer's hand except the new card
     computer_hand_usefulness = [0] * (len(computer_hand_cards) - 1)
+    # Pick the letters in hand except the new card
     for idx in range(len(computer_hand_cards[:(len(computer_hand_cards) - 1)])):
-        for target_word in computer_target_list:
-            if computer_hand_cards[idx] in target_word:
-                computer_hand_usefulness[idx] += 1
+        if computer_hand_cards[idx] == list_selected_target_word[idx]:
+            computer_hand_usefulness[idx] += 1
 
     # Evaluate the usefulness of the new card and determine its position in the hand
+    new_card_usefulness_list = [0] * len(list_selected_target_word)
     new_card = computer_hand_cards[-1]
-    new_card_usefulness = 0
-    for target_word in computer_target_list:
-        for letter in target_word:
-            if letter in new_card:
-                new_card_usefulness += 1
+    for idx in range(len(list_selected_target_word)):
+        if new_card == list_selected_target_word[idx]:
+            new_card_usefulness_list[idx] += 1
+    max_new_card = max(new_card_usefulness_list)
+    max_new_card_index = new_card_usefulness_list.index(max_new_card)
+    # 无法解决如果有两个最大值，那index应该选哪个
 
     # Compare the new card with each original card
     min_usefulness_hand = min(computer_hand_usefulness)
     min_index = computer_hand_usefulness.index(min_usefulness_hand)
-    if new_card_usefulness > min_usefulness_hand:
+    if max_new_card_index >= min_index:
         computer_hand_cards.insert(min_index, computer_hand_cards.pop(-1))
         discard_pile.insert(0, computer_hand_cards[min_index + 1])
         computer_hand_cards.pop(min_index + 1)
@@ -283,7 +300,7 @@ def main():
     length = ask_for_length()
 
     # filter all_words with a length equal to the given length
-    filtered_words_with_specific_length = filter_word_list(all_words, length)
+    filtered_words = filter_word_list(all_words, length)
 
     # set up main_pile and discard_pile
     # TODO
@@ -296,7 +313,6 @@ def main():
     # and initialize discard pile
     # TODO
     human_hand_cards, computer_hand_cards = deal_initial_cards(main_pile, discard_pile, length)
-    computer_target_list = ["black", "apple"]
     # start the game
     while True:
         # check if main_pile is empty by calling check_bricks(main_pile, discard_pile)
@@ -308,7 +324,7 @@ def main():
         print("Computer's current hand is "
               "{}".format(computer_hand_cards))
         print()
-        computer_play(computer_hand_cards, computer_target_list, main_pile, discard_pile)
+        computer_play(computer_hand_cards, filtered_words, main_pile, discard_pile)
 
         # human play goes here
         print("----------------------------------------------------------------------------------------------------")
@@ -353,7 +369,7 @@ def main():
 
         print("Your word list is: {}".format(human_hand_cards))
         # check if game is over and print out results
-        check_game_over(human_hand_cards, computer_hand_cards, filtered_words_with_specific_length)
+        check_game_over(human_hand_cards, computer_hand_cards, filtered_words)
         pass
 
 
