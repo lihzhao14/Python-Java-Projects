@@ -167,21 +167,24 @@ def computer_play(computer_hand_cards, computer_target_list, main_pile, discard_
     for idx_target, target_word in enumerate(computer_target_list):
         # change selected target word to be a list
         list_target_word = list(target_word)
-        for idx in range(len(computer_hand_cards)):
+        for idx in range(len(list_target_word)):
             # Compare each char in target word with each letter in computer hand
             if list_target_word[idx] == computer_hand_cards[idx]:
                 match_computer_hand_list[idx_target] += 1
     max_match = max(match_computer_hand_list)
-    max_index = match_computer_hand_list.index(max_match)
-    selected_target_word = computer_target_list[max_index]
-    # change the selected word to be a list
-    list_selected_target_word = list(selected_target_word)
+    max_match_wordlist = []
+
+    # Generate the most matched words from computer target list
+    for i in computer_target_list:
+        if match_computer_hand_list[i] == max_match:
+            max_match_wordlist.append(computer_target_list[i])
+    # print(max_match_wordlist)
 
     # Evaluate the usefulness of the top card in the main pile
     main_pile_top_card = main_pile[0]
     main_pile_usefulness = 0
-    for target_word in computer_target_list:
-        for letter in target_word:
+    for target_word2 in max_match_wordlist:
+        for letter in target_word2:
             if letter in main_pile_top_card:
                 main_pile_usefulness += 1
 
@@ -189,8 +192,8 @@ def computer_play(computer_hand_cards, computer_target_list, main_pile, discard_
     print("Discard pile: ".format(discard_pile))
     discard_pile_top_card = discard_pile[0]
     discard_pile_usefulness = 0
-    for target_word in computer_target_list:
-        for letter in target_word:
+    for target_word3 in max_match_wordlist:
+        for letter in target_word3:
             if letter in discard_pile_top_card:
                 discard_pile_usefulness += 1
 
@@ -204,25 +207,27 @@ def computer_play(computer_hand_cards, computer_target_list, main_pile, discard_
 
     # Evaluate the usefulness of cards in computer's hand except the new card
     computer_hand_usefulness = [0] * (len(computer_hand_cards) - 1)
-    # Pick the letters in hand except the new card
-    for idx in range(len(computer_hand_cards[:(len(computer_hand_cards) - 1)])):
-        if computer_hand_cards[idx] == list_selected_target_word[idx]:
-            computer_hand_usefulness[idx] += 1
+    # Pick the letters in hand except the new card to compare
+    for idx_hand in range(len(computer_hand_cards[:(len(computer_hand_cards) - 1)])):
+        for target_word in max_match_wordlist:
+            # change selected target word to be a list
+            list_target_word = list(target_word)
+            # compare each char in target word with letters in computer hand by index
+            if computer_hand_cards[idx_hand] == list_target_word[idx_hand]:
+                computer_hand_usefulness[idx_hand] += 1
 
     # Evaluate the usefulness of the new card and determine its position in the hand
-    new_card_usefulness_list = [0] * len(list_selected_target_word)
     new_card = computer_hand_cards[-1]
-    for idx in range(len(list_selected_target_word)):
-        if new_card == list_selected_target_word[idx]:
-            new_card_usefulness_list[idx] += 1
-    max_new_card = max(new_card_usefulness_list)
-    max_new_card_index = new_card_usefulness_list.index(max_new_card)
-    # 无法解决如果有两个最大值，那index应该选哪个
+    new_card_usefulness = 0
+    # compare each char in target word with the new letter by index
+    for target_word6 in max_match_wordlist:
+        if new_card in target_word6:
+            new_card_usefulness += 1
 
-    # Compare the new card with each original card
+    # Compare the new card with each initial card in hand
     min_usefulness_hand = min(computer_hand_usefulness)
     min_index = computer_hand_usefulness.index(min_usefulness_hand)
-    if max_new_card_index >= min_index:
+    if new_card_usefulness >= min_usefulness_hand:
         computer_hand_cards.insert(min_index, computer_hand_cards.pop(-1))
         discard_pile.insert(0, computer_hand_cards[min_index + 1])
         computer_hand_cards.pop(min_index + 1)
