@@ -27,7 +27,8 @@ def ask_for_length():
     #       3. Returns the number of hand cards L
     while True:
         try:
-            length_of_word = int(input("Input the length of the word:"))
+            length_of_word = int(input("Enter a number between 3 ~ 10 to be the length of the word you're going to "
+                                       "guess:"))
             if length_of_word in range(3, 11):
                 break
             else:
@@ -39,27 +40,26 @@ def ask_for_length():
 
 def filter_word_list(all_words, length):
     """
-    Randomly select the words which has the same number as the value of length.
+    Collect the words which has the same length as the given length
     Parameter all_words is the list of all words.
     Parameter length is the given length.
     Returns a list of words with the specific length.
     """
-    # TODO: 1. Given a list of words, and a number, returns a list of words with the specific length
-    #       2. Parameter all_words is the list of all words
-    #       3. Parameter length is the given length
+
     word_list_specific_length = []
     for idx in range(len(all_words)):
         if len(all_words[idx]) == length:
             word_list_specific_length.append(all_words[idx])
-            print(all_words[idx])
+            # print(all_words[idx])
     return word_list_specific_length
 
 
 def set_up(length):
     """
-    Create main pile and discard pile.
+    Create the main pile
+    Create the discard pile of 0 cards, represented as an empty list
     Parameter length is the given length
-    Returns a tuple of lists of mail pile and discard pile
+    Returns both lists as a tuple, with the main pile as the first item and the discard pile as the second item
     """
     # TODO: Creates a main pile of 26 * length cards, represented as a list of lowercase
     #       letters, with length of each letter
@@ -114,19 +114,19 @@ def deal_initial_cards(main_pile, discard_pile, length):
     one representing the computer’s hand
     """
     # TODO
-    computer_hand = []
-    human_hand = []
+    computer_hand_cards = []
+    human_hand_cards = []
     # Remove the card on top of the main pile and put it on the discard pile
     for i in range(length):
         # The computer is always the first person that gets dealt to and always plays first
-        computer_word = main_pile.pop(0)
-        computer_hand.append(computer_word)
+        computer_turn = main_pile.pop(0)
+        computer_hand_cards.append(computer_turn)
         # Generate Human's turn
-        human_word = main_pile.pop(0)
-        human_hand.append(human_word)
+        human_turn = main_pile.pop(0)
+        human_hand_cards.append(human_turn)
     top_card = get_first_from_pile_and_remove(main_pile)
     discard_pile.insert(0, top_card)
-    return human_hand, computer_hand
+    return human_hand_cards, computer_hand_cards
 
 
 def check_bricks(main_pile, discard_pile):
@@ -142,7 +142,7 @@ def check_bricks(main_pile, discard_pile):
         shuffle_cards(discard_pile)
         # main_pile = copy.deepcopy(discard_pile)
         main_pile[:] = discard_pile.copy()  # deepcopy是copy全新的内容到新的地址上；
-                                            # copy是copy全新的内容到原来的地址上
+        # copy是copy全新的内容到原来的地址上
         discard_pile.clear()
         # turn over the top card of the main_pile to be the start of the new discard_pile.
         top_card = get_first_from_pile_and_remove(main_pile)
@@ -161,9 +161,58 @@ def computer_play(computer_hand_cards, computer_target_list, main_pile, discard_
     Parameter computer_target_list is a list of words.
     This function doesn’t return anything
     """
-    # TODO 1. determine the inputs and outputs of the program:
-    #       Inputs: omputer_hand_cards, computer_target_list, main_pile, discard_pile
-    #       Outputs: take the card or always reject it.
+
+    # Evaluate the usefulness of the top card in the main pile
+    main_pile_top_card = main_pile[0]
+    main_pile_usefulness = 0
+    for target_word in computer_target_list:
+        for letter in target_word:
+            if letter in main_pile_top_card:
+                main_pile_usefulness += 1
+
+    # Evaluate the usefulness of the top card in the discard pile
+    print("Discard pile: ".format(discard_pile))
+    discard_pile_top_card = discard_pile[0]
+    discard_pile_usefulness = 0
+    for target_word in computer_target_list:
+        for letter in target_word:
+            if letter in discard_pile_top_card:
+                discard_pile_usefulness += 1
+
+    # Decide whether to take the card from the main pile or the discard pile based on usefulness
+    if main_pile_usefulness >= discard_pile_usefulness:
+        print("Computer draw a card from the MAIN PILE. The card is: '{}'".format(main_pile[0]))
+        computer_hand_cards.append(main_pile.pop(0))
+    else:
+        print("Computer draw a card from the DISCARD PILE. The card is: '{}'".format(discard_pile[0]))
+        computer_hand_cards.append(discard_pile.pop(0))
+
+    # Evaluate the usefulness of cards in computer's hand except the new card
+    computer_hand_usefulness = [0] * (len(computer_hand_cards) - 1)
+    for idx in range(len(computer_hand_cards[:(len(computer_hand_cards) - 1)])):
+        for target_word in computer_target_list:
+            if computer_hand_cards[idx] in target_word:
+                computer_hand_usefulness[idx] += 1
+
+    # Evaluate the usefulness of the new card and determine its position in the hand
+    new_card = computer_hand_cards[-1]
+    new_card_usefulness = 0
+    for target_word in computer_target_list:
+        for letter in target_word:
+            if letter in new_card:
+                new_card_usefulness += 1
+
+    # Compare the new card with each original card
+    min_usefulness_hand = min(computer_hand_usefulness)
+    min_index = computer_hand_usefulness.index(min_usefulness_hand)
+    if new_card_usefulness > min_usefulness_hand:
+        computer_hand_cards.insert(min_index, computer_hand_cards.pop(-1))
+        discard_pile.insert(0, computer_hand_cards[min_index + 1])
+        computer_hand_cards.pop(min_index + 1)
+    else:
+        discard_pile.insert(0, computer_hand_cards.pop(-1))
+    print()
+    print("Computer's current hand is {}".format(computer_hand_cards))
 
 
 def ask_for_the_letter_to_be_replaced(length):
@@ -175,12 +224,12 @@ def ask_for_the_letter_to_be_replaced(length):
 
     while True:
         try:
-            index = int(input("Which the position of the letter you want to replace?"))
+            index = int(input("Enter the index of the letter to be replaced?"))
             # Do not include its own index
             if index in range(0, length):
                 break
             else:
-                print("Please enter a valid integer in [0, {}]".format(length))
+                print("Please enter a valid integer in [0, {}]".format(length - 1))
         except ValueError:
             print("Please enter a valid integer")
     return index
@@ -192,13 +241,14 @@ def ask_yes_or_no(msg):
     Prompt again if the input is invalid
     Returns True if the user answers ‘y’ or ‘yes’, and returns False if the user answers ‘n’ or ‘no’
     """
-    print(msg)
     while True:
-        answer = input("Yes (y) or No (y): ")
-        if answer == "y" or "yes":
+        response = input(msg).lower()
+        if response in ['y', 'yes']:
             return True
-        elif answer == "n" or "no":
+        elif response in ['n', 'no']:
             return False
+        else:
+            print("Invalid input. Please enter again")
 
 
 def check_game_over(human_hand_cards, computer_hand_cards, words_with_specific_length):
@@ -230,41 +280,82 @@ def main():
     print("Welcome to the game!")
 
     # ask for a number as the length of the word
-    # TODO
     length = ask_for_length()
+
     # filter all_words with a length equal to the given length
-    # TODO
-    filter_word_list(all_words, length)
+    filtered_words_with_specific_length = filter_word_list(all_words, length)
 
     # set up main_pile and discard_pile
     # TODO
     main_pile, discard_pile = set_up(length)
 
     # shuffle main pile
-    # TODO
     shuffle_cards(main_pile)
 
     # deal cards to players, creating human_hand_cards and computer_hand_cards
     # and initialize discard pile
     # TODO
-    human_hand, computer_hand = deal_initial_cards(main_pile, discard_pile, length)
-
+    human_hand_cards, computer_hand_cards = deal_initial_cards(main_pile, discard_pile, length)
+    computer_target_list = ["black", "apple"]
     # start the game
     while True:
         # check if main_pile is empty by calling check_bricks(main_pile, discard_pile)
         check_bricks(main_pile, discard_pile)
+
         # computer play goes here
-        # TODO
-        computer_play(computer_hand, computer_target_list, main_pile, discard_pile)
+        print()
+        print("Computer's turn")
+        print("Computer's current hand is "
+              "{}".format(computer_hand_cards))
+        print()
+        computer_play(computer_hand_cards, computer_target_list, main_pile, discard_pile)
+
         # human play goes here
-        # TODO
-        #少一个
-        ask_for_the_letter_to_be_replaced(length)
-        ask_yes_or_no(msg)
+        print("----------------------------------------------------------------------------------------------------")
+        print("Human's turn")
+        print("Human's current hand is "
+              "{}".format(human_hand_cards))
+        print()
+        print("Pick '{}' from DISCARD PILE or reveal the card from MAIN PILE\n".format(discard_pile[0]))
+
+        flag1 = ask_yes_or_no("If you want to get the card from DISCARD PILE, type 'y/yes';\n"
+                              "Otherwise, type 'n/no', you will get a card from MAIN PILE.")
+        print()
+
+        if flag1:
+            human_card = get_first_from_pile_and_remove(discard_pile)
+        else:
+            human_card = get_first_from_pile_and_remove(main_pile)
+        print("The letter from MAIN PILE is '{}'".format(human_card))
+
+        # Another way to judge the card from MAIN PILE or DISCARD PILE
+        # while True:
+        #     reply = input("Reply 'D' or 'M' to respond: ")
+        #     if reply is 'D':
+        #         human_card = discard_pile[0]
+        #         return False
+        #     elif reply is 'M':
+        #         human_card = main_pile[0]
+        #         print("The letter from MAIN PILE is '{}'".format(human_card))
+        #         return False
+
+        flag2 = ask_yes_or_no("Do you want to accept this card?\n"
+                              "Type 'y/yes' to accept, 'n/no' to discard.")
+        print()
+        if flag2:
+            index = ask_for_the_letter_to_be_replaced(length)
+            print("You replaced '{}' with '{}'".format(human_hand_cards[index], human_card))
+            human_hand_cards.insert(index, human_card)
+            human_hand_cards.pop(index + 1)
+        else:
+            discard_pile.insert(0, human_card)
+            print("You didn't put new card in your hand")
+
+        print("Your word list is: {}".format(human_hand_cards))
         # check if game is over and print out results
-        # TODO
-        check_game_over(human_hand_cards, computer_hand_cards, words_with_specific_length)
+        check_game_over(human_hand_cards, computer_hand_cards, filtered_words_with_specific_length)
         pass
+
 
 if __name__ == "__main__":
     main()
