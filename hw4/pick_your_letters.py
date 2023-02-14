@@ -200,7 +200,6 @@ def computer_play(computer_hand_cards, computer_target_list, main_pile, discard_
                 main_pile_usefulness += 1
 
     # Evaluate the usefulness of the top card in the discard pile
-    print("Discard pile: ".format(discard_pile))
     discard_pile_top_card = discard_pile[0]
     discard_pile_usefulness = 0
     for target_word3 in max_match_wordlist:
@@ -338,7 +337,6 @@ def main():
         check_bricks(main_pile, discard_pile)
 
         # computer play goes here
-        print()
         print("Computer's turn")
         print("Computer's current hand is "
               "{}".format(computer_hand_cards))
@@ -357,7 +355,8 @@ def main():
         if check_game_over(human_hand_cards, computer_hand_cards, filtered_words):
             sys.exit()
 
-        flag1 = ask_yes_or_no("If you want to get the card from DISCARD PILE, type 'y/yes';\n"
+        flag1 = ask_yes_or_no("Do you want to get the card from DISCARD PILE?\n"
+                              "Type 'y/yes' if you want.\n"
                               "Otherwise, type 'n/no', you will get a card from MAIN PILE.")
         print()
 
@@ -381,12 +380,16 @@ def main():
             human_hand_cards.pop(index + 1)
         else:
             discard_pile.insert(0, human_card)
-            print("You didn't put new card in your hand")
+            print("You didn't put the new card: '{}' in your hand".format(human_card))
 
         print("Your word list is: {}".format(human_hand_cards))
         # check if game is over and print out results
         if check_game_over(human_hand_cards, computer_hand_cards, filtered_words):
             sys.exit()
+
+        print()
+        print("----------------------------------------------------------------------------------------------------")
+
 
 if __name__ == "__main__":
     main()
