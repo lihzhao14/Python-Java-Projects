@@ -1,6 +1,7 @@
 import random
 import copy
 import string
+import sys
 
 
 def read_from_file(file_name):
@@ -47,6 +48,8 @@ def filter_word_list(all_words, length):
     """
 
     word_list_specific_length = []
+    if not all_words:
+        return []
     for idx in range(len(all_words)):
         if len(all_words[idx]) == length:
             word_list_specific_length.append(all_words[idx])
@@ -67,8 +70,7 @@ def set_up(length):
     for letter in 'abcdefghijklmnopqrstuvwxyz':
         main_pile.extend([letter] * length)
     # Creates a discard pile of 0 cards, represented as an empty list
-    discard_pile = []
-    return main_pile, discard_pile
+    return main_pile, []
 
 
 def shuffle_cards(pile):
@@ -142,7 +144,7 @@ def check_bricks(main_pile, discard_pile):
         shuffle_cards(discard_pile)
         # main_pile = copy.deepcopy(discard_pile)
         main_pile[:] = discard_pile.copy()  # deepcopy是copy全新的内容到新的地址上；
-        # copy是copy全新的内容到原来的地址上
+                                            # copy是copy全新的内容到原来的地址上
         discard_pile.clear()
         # turn over the top card of the main_pile to be the start of the new discard_pile.
         top_card = get_first_from_pile_and_remove(main_pile)
@@ -163,7 +165,7 @@ def computer_play(computer_hand_cards, computer_target_list, main_pile, discard_
     """
 
     # Select which word is going to be guessed
-    match_computer_hand_list = [0] * len(computer_hand_cards)
+    match_computer_hand_list = [0] * len(computer_target_list)
     for idx_target, target_word in enumerate(computer_target_list):
         # change selected target word to be a list
         list_target_word = list(target_word)
@@ -175,7 +177,7 @@ def computer_play(computer_hand_cards, computer_target_list, main_pile, discard_
     max_match_wordlist = []
 
     # Generate the most matched words from computer target list
-    for i in computer_target_list:
+    for i in range(len(computer_target_list)):
         if match_computer_hand_list[i] == max_match:
             max_match_wordlist.append(computer_target_list[i])
     # print(max_match_wordlist)
@@ -286,10 +288,13 @@ def check_game_over(human_hand_cards, computer_hand_cards, words_with_specific_l
     human_hand_cards_str = "".join(human_hand_cards)
     computer_hand_cards_str = "".join(computer_hand_cards)
     if human_hand_cards_str in words_with_specific_length:
+        print("You win!")
         return True
     elif computer_hand_cards_str in words_with_specific_length:
+        print("Computer win!")
         return True
     elif human_hand_cards_str in words_with_specific_length and computer_hand_cards_str in words_with_specific_length:
+        print("Computer and you both win!")
         return True
     else:
         return False
@@ -339,6 +344,10 @@ def main():
         print()
         print("Pick '{}' from DISCARD PILE or reveal the card from MAIN PILE\n".format(discard_pile[0]))
 
+        # check if game is over and print out results
+        if check_game_over(human_hand_cards, computer_hand_cards, filtered_words):
+            sys.exit()
+
         flag1 = ask_yes_or_no("If you want to get the card from DISCARD PILE, type 'y/yes';\n"
                               "Otherwise, type 'n/no', you will get a card from MAIN PILE.")
         print()
@@ -349,16 +358,9 @@ def main():
             human_card = get_first_from_pile_and_remove(main_pile)
         print("The letter from MAIN PILE is '{}'".format(human_card))
 
-        # Another way to judge the card from MAIN PILE or DISCARD PILE
-        # while True:
-        #     reply = input("Reply 'D' or 'M' to respond: ")
-        #     if reply is 'D':
-        #         human_card = discard_pile[0]
-        #         return False
-        #     elif reply is 'M':
-        #         human_card = main_pile[0]
-        #         print("The letter from MAIN PILE is '{}'".format(human_card))
-        #         return False
+        # check if game is over and print out results
+        if check_game_over(human_hand_cards, computer_hand_cards, filtered_words):
+            sys.exit()
 
         flag2 = ask_yes_or_no("Do you want to accept this card?\n"
                               "Type 'y/yes' to accept, 'n/no' to discard.")
@@ -374,9 +376,8 @@ def main():
 
         print("Your word list is: {}".format(human_hand_cards))
         # check if game is over and print out results
-        check_game_over(human_hand_cards, computer_hand_cards, filtered_words)
-        pass
-
+        if check_game_over(human_hand_cards, computer_hand_cards, filtered_words):
+            sys.exit()
 
 if __name__ == "__main__":
     main()
