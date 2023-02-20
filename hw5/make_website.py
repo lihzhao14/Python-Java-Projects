@@ -1,3 +1,31 @@
+def read_from_file(file_name):
+    """
+    reads the file and stores it in memory as a list of lines
+    """
+    with open(file_name, 'r') as fin:
+        # reads all lines in the file as a list
+        contents = fin.readlines()
+    return contents
+
+
+def detect_name(contents):
+    """
+    Detect and return the name by extracting the first line.
+    """
+    name = contents[0]
+    name.strip()
+    if len(name) > 0:
+        first_letter = name[0]
+    else:
+        first_letter = None
+
+    if first_letter in "ABCDEFGHIJKLMNOPQRSTUVWXYZ":
+        return first_letter
+    else:
+        return None
+
+
+
 def surround_block(tag, text):
     """
     Surrounds the given text with the given html tag and returns the string.
@@ -47,7 +75,8 @@ def main():
     # DO NOT REMOVE OR UPDATE THIS CODE
     # generate resume.html file from provided sample resume.txt
     generate_html('resume.txt', 'resume.html')
-
+    contents = read_from_file("resume.txt")
+    detect_name(contents)
     # DO NOT REMOVE OR UPDATE THIS CODE.
     # Uncomment each call to the generate_html function when you’re ready
     # to test how your program handles each additional test resume.txt file
