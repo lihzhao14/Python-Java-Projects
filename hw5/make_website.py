@@ -13,16 +13,19 @@ def detect_name(contents):
     Detect and return the name by extracting the first line.
     """
     name = contents[0]
-    name.strip()
+    name = name.strip()
     if len(name) > 0:
         first_letter = name[0]
     else:
-        first_letter = None
+        return "Invalid Name"
 
     if first_letter in "ABCDEFGHIJKLMNOPQRSTUVWXYZ":
-        return first_letter
+        if all(c.isalpha() or c.isspace() for c in name):
+            return name
+        else:
+            return "Invalid Name"
     else:
-        return None
+        return "Invalid Name"
 
 
 
