@@ -119,7 +119,16 @@ class MakeWebsite_Test(unittest.TestCase):
                   "using Matlab)"]
         projects_list = detect_projects(test1)
         self.assertEqual(projects_list, expect)
-
+        # test2:
+        test2 = read_from_file("../hw5/TestResumes/resume_projects_with_blanks/resume.txt")
+        expect = ["CancerDetector.com, New Jersey, USA - Project manager, codified the assessment and mapped it to "
+                  "the CancerDetector ontology. Member of the UI design team, designed the portfolio builder UI and "
+                  "category search pages UI. Reviewed existing rank order and developed new search rank order "
+                  "approach.",
+                  "Biomedical Imaging - Developed a semi-automatic image mosaic program based on SIFT algorithm ("
+                  "using Matlab)"]
+        projects_list = detect_projects(test2)
+        self.assertEqual(projects_list, expect)
 
     def test_surround_block(self):
         # test text with surrounding h1 tags

@@ -77,21 +77,24 @@ def detect_projects(contents):
     Detect and return the projects as a list by looking for the word “Projects” in the list.
     """
     projects_list = []
-    for line in contents:
-        line.strip()
+    # Give an initial value of start_index and end_index
+    start_index = -1
+    end_index = len(contents)
+    for idx, line in enumerate(contents):
+        line = line.strip()
         if "Projects" in line:
-            start_index = contents.index(line)
+            start_index = idx
             break
 
-    for line in contents:
-        line.strip()
+    for idx, line in enumerate(contents):
+        line = line.strip()
         if len(line) >= 10 and '-' * 10 in line:
-            end_index = contents.index(line)
+            end_index = idx
             break
 
-    for line in contents[(start_index + 1): end_index]:
-        line.strip()
-        if line != "\n":
+    for line in contents[start_index+1: end_index]:
+        line = line.strip()
+        if line:
             projects_list.append(line)
     return projects_list
 
