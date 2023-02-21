@@ -44,37 +44,71 @@ class MakeWebsite_Test(unittest.TestCase):
         self.assertEqual(test_contents, expected_contents)
 
     def test_detect_name(self):
-        # test1: Test if it is the valid name
-        test1 = ["Tony Stark", "This should not appear."]
+        # test1: Test if it is the valid name having the leading or trailing space
+        test1 = ["   Tony Stark   ", "This should not appear."]
         result = detect_name(test1)
-        self.assertEqual(result, 'Tony Stark')
+        self.assertEqual(result, "Tony Stark")
+        print()
+        print("The name '{}' is valid".format(result))
 
-        # test2: Test if it has the leading or trailing space
-        test2 = [" Tony Stark     ", "This should not appear."]
+        # test2: Test if it starts with a non-alphabetic token
+        test2 = ["22ony Stark", "This should not appear."]
         result = detect_name(test2)
-        self.assertEqual(result, 'Tony Stark')
+        self.assertEqual(result, "Invalid Name")
+        print("The name is valid because it starts with a non-alphabetic token")
 
         # test3: Test if it's an empty name
         test3 = ["\n", "Projects", "Courses"]
         result = detect_name(test3)
         self.assertEqual(result, "Invalid Name")
+        print("The name is invalid because it is empty")
 
         # test4: Test if it is the invalid name
         # test4_1: Test if the capital letter is in the lower case
-        test4_1 = ["tony Stark", "This should not appear."]
-        result = detect_name(test4_1)
+        test4 = ["tony Stark", "This should not appear."]
+        result = detect_name(test4)
         self.assertEqual(result, "Invalid Name")
-        # test4_2: Test if it contains numbers
-        test4_2 = ["Ton12y Stark"]
-        result = detect_name(test4_2)
-        self.assertEqual(result, "Invalid Name")
+        print("The name '{}' is invalid because it starts with a lower case letter".format(test4[0]))
 
+    def test_detect_email(self):
+        # test1
+        test1 = ["    lbrandon@wharton.upenn.edu    ", "people", "projects"]
+        result = detect_email(test1)
+        self.assertEqual(result, "lbrandon@wharton.upenn.edu")
+        print()
+        print("The email address '{}' is valid".format(result))
+        # test2
+        test2 = ["lbrandon@wharton2.upenn.com"]
+        result = detect_email(test2)
+        self.assertEqual(result, "")
+        print("The email address {} is invalid because contains numbers".format(test2))
+        # test3
+        test3 = ["lbrandon2@wharton.upenn.com"]
+        result = detect_email(test3)
+        self.assertEqual(result, "")
+        print("The email address {} is invalid because contains numbers".format(test3))
+        # test4
+        test4 = ["lbrandon@Wharton.upenn.com"]
+        result = detect_email(test4)
+        self.assertEqual(result, "")
+        print("The email address {} is invalid because the first letter of @ is not in lower case".format(test3))
 
+    def test_detect_course(self):
+        # test1:
+        test1 = ["    Courses   	:-		Programming Languages and Techniques,	Biomedical image analysis	,  Pottery		"]
+        expect = ["Programming Languages and Techniques", "Biomedical image analysis", "Pottery"]
+        courses_name = detect_course(test1)
+        self.assertEqual(courses_name, expect)
+        print()
+        print("Detect course test1 passed")
 
-
-
-
-
+        # test2:
+        test2 = ["Courses:-_##$&^!*()Programming Languages and Techniques, Biomedical image analysis, Software "
+                 "Engineering"]
+        expect = ["Programming Languages and Techniques", "Biomedical image analysis", "Software Engineering"]
+        courses_name = detect_course(test2)
+        self.assertEqual(courses_name, expect)
+        print("Detect course test2 passed")
     def test_surround_block(self):
         # test text with surrounding h1 tags
         self.assertEqual("<h1>Eagles</h1>", surround_block('h1', 'Eagles'))

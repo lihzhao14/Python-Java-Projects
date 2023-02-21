@@ -1,3 +1,5 @@
+import string
+
 def read_from_file(file_name):
     """
     reads the file and stores it in memory as a list of lines
@@ -18,14 +20,67 @@ def detect_name(contents):
         first_letter = name[0]
     else:
         return "Invalid Name"
-
-    if first_letter in "ABCDEFGHIJKLMNOPQRSTUVWXYZ":
-        if all(c.isalpha() or c.isspace() for c in name):
-            return name
-        else:
-            return "Invalid Name"
+    # if the first letter is the upper case
+    if first_letter in string.ascii_letters.upper():
+        return name
     else:
         return "Invalid Name"
+
+
+def detect_email(contents):
+    """
+    Detect and return the email address by looking for a line that has the ‘@’ character.
+    """
+    # detect @ in all lines
+    for line in contents:
+        line = line.strip()
+        if "@" in line:
+            if line[-4:] != ".com" or ".edu":
+                index = line.index("@")
+                # if the letter after "@" is lower case
+                if line[index + 1] in string.ascii_letters.lower():
+                    for i in range(len(line)):
+                        if line[i].isnumeric() or line[i].isdigit():
+                            return ""
+                    return line
+    return ""
+
+
+def detect_course(contents):
+    """
+    Detect and return the courses as a list by looking for the word “Courses” in the list and then extract the line
+    that contains that word.
+    """
+    courses_list = ""
+    # Extract the line that contains "Course"
+    for line in contents:
+        if "Course" in line:
+            courses_list = line.strip()
+            break
+
+    start_index = len("Courses")
+    if courses_list:
+        # any random punctuation after the word “Courses” and before the first actual course needs to be ignored
+        while courses_list[start_index] not in string.ascii_letters:
+            start_index += 1
+        courses_list = courses_list[start_index:]
+        split_courses = courses_list.split(",")
+        split_courses = [s.strip() for s in split_courses]
+        return split_courses
+    else:
+        return ""
+
+def detect_projects(contents):
+    """
+    Detect and return the projects as a list by looking for the word “Projects” in the list.
+    """
+    projects_list = []
+    for line in contents:
+        if "Projects" in line:
+            index = contents.index(line)
+            return index
+        elif
+    for line in
 
 
 
