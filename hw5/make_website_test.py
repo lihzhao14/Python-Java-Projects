@@ -45,57 +45,56 @@ class MakeWebsite_Test(unittest.TestCase):
 
     def test_detect_name(self):
         # test1: Test if it is the valid name having the leading or trailing space
-        test1 = ["   Tony Stark   ", "This should not appear."]
+        test1 = ["   Tony Stark   \n", "This should not appear.\n"]
         result = detect_name(test1)
         self.assertEqual(result, "Tony Stark")
         print()
         print("The name '{}' is valid".format(result))
 
         # test2: Test if it starts with a non-alphabetic token
-        test2 = ["22ony Stark", "This should not appear."]
+        test2 = ["22ony Stark\n", "This should not appear.\n"]
         result = detect_name(test2)
         self.assertEqual(result, "Invalid Name")
         print("The name is valid because it starts with a non-alphabetic token")
 
         # test3: Test if it's an empty name
-        test3 = ["\n", "Projects", "Courses"]
+        test3 = ["\n", "Projects\n", "Courses\n"]
         result = detect_name(test3)
         self.assertEqual(result, "Invalid Name")
         print("The name is invalid because it is empty")
 
-        # test4: Test if it is the invalid name
-        # test4_1: Test if the capital letter is in the lower case
-        test4 = ["tony Stark", "This should not appear."]
+        # test4: Test if the capital letter is in the lower case
+        test4 = ["tony Stark\n", "This should not appear.\n"]
         result = detect_name(test4)
         self.assertEqual(result, "Invalid Name")
         print("The name '{}' is invalid because it starts with a lower case letter".format(test4[0]))
 
     def test_detect_email(self):
         # test1
-        test1 = ["    lbrandon@wharton.upenn.edu    ", "people", "projects"]
+        test1 = read_from_file("../hw5/TestResumes/resume_template_email_w_whitespace/resume.txt")
         result = detect_email(test1)
         self.assertEqual(result, "lbrandon@wharton.upenn.edu")
         print()
         print("The email address '{}' is valid".format(result))
         # test2
-        test2 = ["lbrandon@wharton2.upenn.com"]
+        test2 = ["lbrandon@wharton2.upenn.com\n"]
         result = detect_email(test2)
         self.assertEqual(result, "")
         print("The email address {} is invalid because contains numbers".format(test2))
         # test3
-        test3 = ["lbrandon2@wharton.upenn.com"]
+        test3 = read_from_file("../hw5/TestResumes/resume_wrong_email/resume.txt")
         result = detect_email(test3)
         self.assertEqual(result, "")
         print("The email address {} is invalid because contains numbers".format(test3))
         # test4
-        test4 = ["lbrandon@Wharton.upenn.com"]
+        test4 = ["lbrandon@Wharton.upenn.com\n"]
         result = detect_email(test4)
         self.assertEqual(result, "")
         print("The email address {} is invalid because the first letter of @ is not in lower case".format(test3))
 
     def test_detect_course(self):
         # test1:
-        test1 = ["    Courses   	:-		Programming Languages and Techniques,	Biomedical image analysis	,  Pottery		"]
+        test1 = read_from_file("../hw5/TestResumes/resume_courses_w_whitespace/resume.txt")
         expect = ["Programming Languages and Techniques", "Biomedical image analysis", "Pottery"]
         courses_name = detect_course(test1)
         self.assertEqual(courses_name, expect)
@@ -103,12 +102,25 @@ class MakeWebsite_Test(unittest.TestCase):
         print("Detect course test1 passed")
 
         # test2:
-        test2 = ["Courses:-_##$&^!*()Programming Languages and Techniques, Biomedical image analysis, Software "
-                 "Engineering"]
+        test2 = read_from_file("../hw5/TestResumes/resume_courses_weird_punc/resume.txt")
         expect = ["Programming Languages and Techniques", "Biomedical image analysis", "Software Engineering"]
         courses_name = detect_course(test2)
         self.assertEqual(courses_name, expect)
         print("Detect course test2 passed")
+
+    def test_detect_projects(self):
+        # test1:
+        test1 = read_from_file("../hw5/TestResumes/resume_projects_w_whitespace/resume.txt")
+        expect = ["CancerDetector.com, New Jersey, USA - Project manager, codified the assessment and mapped it to "
+                  "the CancerDetector ontology. Member of the UI design team, designed the portfolio builder UI and "
+                  "category search pages UI. Reviewed existing rank order and developed new search rank order "
+                  "approach.",
+                  "Biomedical Imaging - Developed a semi-automatic image mosaic program based on SIFT algorithm ("
+                  "using Matlab)"]
+        projects_list = detect_projects(test1)
+        self.assertEqual(projects_list, expect)
+
+
     def test_surround_block(self):
         # test text with surrounding h1 tags
         self.assertEqual("<h1>Eagles</h1>", surround_block('h1', 'Eagles'))

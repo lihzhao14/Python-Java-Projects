@@ -1,5 +1,6 @@
 import string
 
+
 def read_from_file(file_name):
     """
     reads the file and stores it in memory as a list of lines
@@ -70,18 +71,29 @@ def detect_course(contents):
     else:
         return ""
 
+
 def detect_projects(contents):
     """
     Detect and return the projects as a list by looking for the word “Projects” in the list.
     """
     projects_list = []
     for line in contents:
+        line.strip()
         if "Projects" in line:
-            index = contents.index(line)
-            return index
-        elif
-    for line in
+            start_index = contents.index(line)
+            break
 
+    for line in contents:
+        line.strip()
+        if len(line) >= 10 and '-' * 10 in line:
+            end_index = contents.index(line)
+            break
+
+    for line in contents[(start_index + 1): end_index]:
+        line.strip()
+        if line != "\n":
+            projects_list.append(line)
+    return projects_list
 
 
 def surround_block(tag, text):
