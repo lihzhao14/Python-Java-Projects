@@ -39,9 +39,10 @@ def detect_email(contents):
             if line[-4:] != ".com" or ".edu":
                 index = line.index("@")
                 # if the letter after "@" is lower case
-                if line[index + 1] in string.ascii_letters.lower():
+                if line[index + 1] in 'abcdefghijklmnopqrstuvwxyz':
                     for i in range(len(line)):
-                        if line[i].isnumeric() or line[i].isdigit():
+                        if line[i] not in 'abcdefghijklmnopqrstuvwxyz@':
+                        # if line[i].isnumeric() or line[i].isdigit():
                             return ""
                     return line
     return ""
@@ -92,7 +93,7 @@ def detect_projects(contents):
             end_index = idx
             break
 
-    for line in contents[start_index+1: end_index]:
+    for line in contents[start_index + 1: end_index]:
         line = line.strip()
         if line:
             projects_list.append(line)
@@ -103,9 +104,18 @@ def surround_block(tag, text):
     """
     Surrounds the given text with the given html tag and returns the string.
     """
+    return "<" + tag + ">" + text + "</" + tag + ">"
 
-    # insert code
-    pass
+
+def surround_list_block(tag, sample_list):
+    """
+    Surrounds the given list with the given html tag and returns the list.
+    """
+    tag1 = "<" + tag + ">"
+    tag2 = "</" + tag + ">"
+    sample_list.insert(0, tag1)
+    sample_list.append(tag2)
+    return sample_list
 
 
 def create_email_link(email_address):
@@ -120,9 +130,16 @@ def create_email_link(email_address):
     Note: If, for some reason the email address does not contain @,
     use the email address as is and don't replace anything.
     """
+    if "@" in email_address:
+        username, domain = email_address.split("@")
+        formatted_email = "<a href=\"mailto:" + email_address + "\">" + username + "[aT]" + domain + "</a>"
+        return formatted_email
+    else:
+        formatted_email = "<a href=\"mailto:" + email_address + "\">" + email_address + "</a>"
+        return formatted_email
 
-    # insert code
-    pass
+
+# print(create_email_link("lihongZseas.upenn.edu"))
 
 
 def generate_html(txt_input_file, html_output_file):
@@ -130,36 +147,90 @@ def generate_html(txt_input_file, html_output_file):
     Loads given txt_input_file,
     gets the name, email address, list of projects, and list of courses,
     then writes the info to the given html_output_file.
-
-    # Hint(s):
-    # call function(s) to load given txt_input_file
-    # call function(s) to get name
-    # call function(s) to get email address
-    # call function(s) to get list of projects
-    # call function(s) to get list of courses
-    # call function(s) to write the name, email address, list of projects, and list of courses to the given html_output_file
     """
 
-    # insert code
-    pass
+    # call read_from_file function to load given txt_input_file
+    contents = read_from_file(txt_input_file)
+    # call read_from_file function to load resume_template.html
+    template_contents = read_from_file("resume_template.html")
+    # Remove the last 2 lines of HTML (the </body> and </html> lines).
+    del template_contents[-2:]
+
+    # call functions to get name, email address, list of projects and list of courses
+    dict_resume_contents = {
+        "Name": detect_name(contents),
+        "Email": detect_email(contents),
+        "Projects": detect_projects(contents),
+        "Courses": detect_course(contents)
+    }
+
+    # set <div id="page-wrap"> in the 1st line and </div> in the following line
+    initial_div = ["<div id=\"page-wrap\">"]
+
+    # basic information section
+    basic_section = list(surround_block("h1", dict_resume_contents["Name"]))
+    # name
+    # email
+    email = "Email: " + create_email_link(dict_resume_contents["Email"])
+    basic_section.append(surround_block("p", email))
+    # insert <div> and </div>
+    basic_section = surround_list_block("div", basic_section)
+
+    # projects section
+    projects_section = list(surround_block("h2", "Projects"))
+    projects_section_1 = []
+    for i in range(len(dict_resume_contents["Projects"])):
+        projects_section_1.append(surround_block("li", dict_resume_contents["Projects"][i]))
+    # insert <ul> and </ul>
+    projects_section_1 = surround_list_block("div", projects_section_1)
+    # Generate the complete projects section
+    projects_section.extend(projects_section_1)
+    # insert <div> and </div>
+    projects_section = surround_list_block("div", projects_section)
+
+    # courses section
+    courses_section = list(surround_block("h3", "Courses"))
+    # Covert the list of courses to a string
+    courses_string = ", ".join(dict_resume_contents["Courses"])
+    courses_section.append(surround_block("span", courses_string))
+    courses_section = surround_list_block("div", courses_section)
+
+    list_resume_contents = initial_div + basic_section + projects_section + courses_section
+
+    template_contents.extend(list_resume_contents)
+    # Add </div>, </body> and </html> lines).
+    template_contents.extend(["</div>", "</body>", "</html>"])
+
+    # html_output_file Create a new file
+    fout = open(html_output_file, 'w')
+    # Write the final HTML to a new file resume.html
+    fout.writelines(template_contents)
+    # close file
+    fout.close()
 
 
 def main():
     # DO NOT REMOVE OR UPDATE THIS CODE
     # generate resume.html file from provided sample resume.txt
     generate_html('resume.txt', 'resume.html')
-    contents = read_from_file("resume.txt")
-    detect_name(contents)
+
     # DO NOT REMOVE OR UPDATE THIS CODE.
     # Uncomment each call to the generate_html function when you’re ready
     # to test how your program handles each additional test resume.txt file
-    # generate_html('TestResumes/resume_bad_name_lowercase/resume.txt', 'TestResumes/resume_bad_name_lowercase/resume.html')
-    # generate_html('TestResumes/resume_courses_w_whitespace/resume.txt', 'TestResumes/resume_courses_w_whitespace/resume.html')
-    # generate_html('TestResumes/resume_courses_weird_punc/resume.txt', 'TestResumes/resume_courses_weird_punc/resume.html')
-    # generate_html('TestResumes/resume_projects_w_whitespace/resume.txt', 'TestResumes/resume_projects_w_whitespace/resume.html')
-    # generate_html('TestResumes/resume_projects_with_blanks/resume.txt', 'TestResumes/resume_projects_with_blanks/resume.html')
-    # generate_html('TestResumes/resume_template_email_w_whitespace/resume.txt', 'TestResumes/resume_template_email_w_whitespace/resume.html')
-    # generate_html('TestResumes/resume_wrong_email/resume.txt', 'TestResumes/resume_wrong_email/resume.html')
+    generate_html('TestResumes/resume_bad_name_lowercase/resume.txt',
+                  'TestResumes/resume_bad_name_lowercase/resume.html')
+    generate_html('TestResumes/resume_courses_w_whitespace/resume.txt',
+                  'TestResumes/resume_courses_w_whitespace/resume.html')
+    generate_html('TestResumes/resume_courses_weird_punc/resume.txt',
+                  'TestResumes/resume_courses_weird_punc/resume.html')
+    generate_html('TestResumes/resume_projects_w_whitespace/resume.txt',
+                  'TestResumes/resume_projects_w_whitespace/resume.html')
+    generate_html('TestResumes/resume_projects_with_blanks/resume.txt',
+                  'TestResumes/resume_projects_with_blanks/resume.html')
+    generate_html('TestResumes/resume_template_email_w_whitespace/resume.txt',
+                  'TestResumes/resume_template_email_w_whitespace/resume.html')
+    generate_html('TestResumes/resume_wrong_email/resume.txt',
+                  'TestResumes/resume_wrong_email/resume.html')
 
     # If you want to test additional resume files, call the generate_html function with the given .txt file
     # and desired name of output .html file

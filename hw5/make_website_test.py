@@ -74,23 +74,18 @@ class MakeWebsite_Test(unittest.TestCase):
         test1 = read_from_file("../hw5/TestResumes/resume_template_email_w_whitespace/resume.txt")
         result = detect_email(test1)
         self.assertEqual(result, "lbrandon@wharton.upenn.edu")
-        print()
-        print("The email address '{}' is valid".format(result))
         # test2
         test2 = ["lbrandon@wharton2.upenn.com\n"]
         result = detect_email(test2)
         self.assertEqual(result, "")
-        print("The email address {} is invalid because contains numbers".format(test2))
         # test3
         test3 = read_from_file("../hw5/TestResumes/resume_wrong_email/resume.txt")
         result = detect_email(test3)
         self.assertEqual(result, "")
-        print("The email address {} is invalid because contains numbers".format(test3))
         # test4
         test4 = ["lbrandon@Wharton.upenn.com\n"]
         result = detect_email(test4)
         self.assertEqual(result, "")
-        print("The email address {} is invalid because the first letter of @ is not in lower case".format(test3))
 
     def test_detect_course(self):
         # test1:
@@ -144,6 +139,16 @@ class MakeWebsite_Test(unittest.TestCase):
                          surround_block('p', 'Lorem ipsum dolor sit amet, consectetur ' +
                                         'adipiscing elit. Sed ac felis sit amet ante porta ' +
                                         'hendrerit at at urna.'))
+
+    def test_surround_list_block(self):
+        sample_list = ["<h2>Projects</h2>", "<ul>", "<li>built a robot</li>", "<li>fixed an ios app</li>", "</ul>"]
+        # for i in range(len(sample_list)):
+        #     sample_list[i].strip('\n')
+        expect = ["<div>", "<h2>Projects</h2>", "<ul>", "<li>built a robot</li>", "<li>fixed an ios app</li>", "</ul>", "</div>"]
+        self.assertEqual(expect, surround_list_block("div", sample_list))
+
+        for i in range(len(sample_list)):
+            sample_list[i].strip('\n')
 
     def test_create_email_link(self):
         # test email with @ sign
