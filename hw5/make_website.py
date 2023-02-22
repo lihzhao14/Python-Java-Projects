@@ -1,3 +1,9 @@
+# Student Name in Canvas: Lihong Zhao
+# Penn ID: 51007389
+# Did you do this homework on your own (yes / no): yes
+# Resources used outside course materials: None
+# Statement: I admit that this assignment was done by me alone without help.
+
 import string
 
 
@@ -8,6 +14,9 @@ def read_from_file(file_name):
     with open(file_name, 'r') as fin:
         # reads all lines in the file as a list
         contents = fin.readlines()
+    # clear the "\n" for each line
+    for i in range(len(contents)):
+        contents[i] = contents[i].strip('\n')
     return contents
 
 
@@ -15,13 +24,15 @@ def detect_name(contents):
     """
     Detect and return the name by extracting the first line.
     """
+    # extract the first line which contains the name
     name = contents[0]
     name = name.strip()
+    # check if the of name is empty
     if len(name) > 0:
         first_letter = name[0]
     else:
         return "Invalid Name"
-    # if the first letter is the upper case
+    # check if the first letter is the upper case
     if first_letter in string.ascii_letters.upper():
         return name
     else:
@@ -33,19 +44,28 @@ def detect_email(contents):
     Detect and return the email address by looking for a line that has the ‘@’ character.
     """
     # detect @ in all lines
+    at_line = None
     for line in contents:
         line = line.strip()
         if "@" in line:
-            if line[-4:] != ".com" or ".edu":
-                index = line.index("@")
-                # if the letter after "@" is lower case
-                if line[index + 1] in 'abcdefghijklmnopqrstuvwxyz':
-                    for i in range(len(line)):
-                        if line[i] not in 'abcdefghijklmnopqrstuvwxyz@':
-                        # if line[i].isnumeric() or line[i].isdigit():
-                            return ""
-                    return line
-    return ""
+            at_line = line
+            break
+    if at_line is None:
+        return ""
+
+    at_index = at_line.index("@")
+
+    # check if the last four characters of the email need to be either .com or .edu
+    if at_line[-4:] not in [".com", ".edu"]:
+        return ""
+    # check if the letter after "@" is lower case
+    if at_line[at_index + 1] not in "abcdefghijklmnopqrstuvwxyz":
+        return ""
+    # check if there is no digits or numbers in the email address
+    for i in range(len(at_line)):
+        if at_line[i] not in "abcdefghijklmnopqrstuvwxyz@.":
+            return ""
+    return at_line
 
 
 def detect_course(contents):
@@ -65,9 +85,12 @@ def detect_course(contents):
         # any random punctuation after the word “Courses” and before the first actual course needs to be ignored
         while courses_list[start_index] not in string.ascii_letters:
             start_index += 1
+        # start from the first letter without punctuations
         courses_list = courses_list[start_index:]
+        # split courses by ","
         split_courses = courses_list.split(",")
-        split_courses = [s.strip() for s in split_courses]
+        # clear the leading or trailing whitespace
+        split_courses = [course.strip() for course in split_courses]
         return split_courses
     else:
         return ""
@@ -81,22 +104,29 @@ def detect_projects(contents):
     # Give an initial value of start_index and end_index
     start_index = -1
     end_index = len(contents)
+    # find the index of the line contains "Projects"
     for idx, line in enumerate(contents):
         line = line.strip()
         if "Projects" in line:
             start_index = idx
             break
 
+    # find the index of the line contains ‘----------’(at least 10 minus signs)
     for idx, line in enumerate(contents):
         line = line.strip()
         if len(line) >= 10 and '-' * 10 in line:
             end_index = idx
             break
 
+    # Combine all projects in a list
     for line in contents[start_index + 1: end_index]:
         line = line.strip()
         if line:
             projects_list.append(line)
+
+    # check if there are projects or not
+    if not projects_list:
+        return ""
     return projects_list
 
 
@@ -111,8 +141,10 @@ def surround_list_block(tag, sample_list):
     """
     Surrounds the given list with the given html tag and returns the list.
     """
+    # create tags
     tag1 = "<" + tag + ">"
     tag2 = "</" + tag + ">"
+    # insert tags in the first line and the last line
     sample_list.insert(0, tag1)
     sample_list.append(tag2)
     return sample_list
@@ -139,9 +171,6 @@ def create_email_link(email_address):
         return formatted_email
 
 
-# print(create_email_link("lihongZseas.upenn.edu"))
-
-
 def generate_html(txt_input_file, html_output_file):
     """
     Loads given txt_input_file,
@@ -152,7 +181,10 @@ def generate_html(txt_input_file, html_output_file):
     # call read_from_file function to load given txt_input_file
     contents = read_from_file(txt_input_file)
     # call read_from_file function to load resume_template.html
-    template_contents = read_from_file("resume_template.html")
+    with open("resume_template.html", 'r') as fin:
+        # reads all lines in the file as a list
+        template_contents = fin.readlines()
+    # template_contents = read_from_file("resume_template.html")
     # Remove the last 2 lines of HTML (the </body> and </html> lines).
     del template_contents[-2:]
 
@@ -168,8 +200,8 @@ def generate_html(txt_input_file, html_output_file):
     initial_div = ["<div id=\"page-wrap\">"]
 
     # basic information section
-    basic_section = list(surround_block("h1", dict_resume_contents["Name"]))
     # name
+    basic_section = [surround_block("h1", dict_resume_contents["Name"])]
     # email
     email = "Email: " + create_email_link(dict_resume_contents["Email"])
     basic_section.append(surround_block("p", email))
@@ -177,29 +209,30 @@ def generate_html(txt_input_file, html_output_file):
     basic_section = surround_list_block("div", basic_section)
 
     # projects section
-    projects_section = list(surround_block("h2", "Projects"))
+    projects_section = [surround_block("h2", "Projects")]
     projects_section_1 = []
     for i in range(len(dict_resume_contents["Projects"])):
         projects_section_1.append(surround_block("li", dict_resume_contents["Projects"][i]))
     # insert <ul> and </ul>
-    projects_section_1 = surround_list_block("div", projects_section_1)
+    projects_section_1 = surround_list_block("ul", projects_section_1)
     # Generate the complete projects section
     projects_section.extend(projects_section_1)
     # insert <div> and </div>
     projects_section = surround_list_block("div", projects_section)
 
     # courses section
-    courses_section = list(surround_block("h3", "Courses"))
+    courses_section = [surround_block("h3", "Courses")]
     # Covert the list of courses to a string
     courses_string = ", ".join(dict_resume_contents["Courses"])
     courses_section.append(surround_block("span", courses_string))
     courses_section = surround_list_block("div", courses_section)
 
-    list_resume_contents = initial_div + basic_section + projects_section + courses_section
+    # Combine all the resume contents together in a list, also add "</div>", "</body>", "</html>"
+    list_resume_contents = initial_div + basic_section + projects_section + courses_section + ["</div>", "</body>", "</html>"]
+    # add "\n" for each line
+    resume_contents = [line + '\n' for line in list_resume_contents]
 
-    template_contents.extend(list_resume_contents)
-    # Add </div>, </body> and </html> lines).
-    template_contents.extend(["</div>", "</body>", "</html>"])
+    template_contents.extend(resume_contents)
 
     # html_output_file Create a new file
     fout = open(html_output_file, 'w')

@@ -1,3 +1,9 @@
+# Student Name in Canvas: Lihong Zhao
+# Penn ID: 51007389
+# Did you do this homework on your own (yes / no): yes
+# Resources used outside course materials: None
+# Statement: I admit that this assignment was done by me alone without help.
+
 import unittest
 
 from make_website import *
@@ -22,18 +28,18 @@ class MakeWebsite_Test(unittest.TestCase):
         with open("temp.txt", "w") as f:
             f.writelines(test_contents)
 
-        expected_contents = ["I.M. Student\n",
+        expected_contents = ["I.M. Student",
                              "Courses :- Programming Languages and Techniques, Biomedical image analysis, Software "
-                             "Engineering\n",
-                             "Projects\n",
+                             "Engineering",
+                             "Projects",
                              "CancerDetector.com, New Jersey, USA - Project manager, codified the assessment and "
                              "mapped it to the CancerDetector ontology. Member of the UI design team, designed the "
                              "portfolio builder UI and category search pages UI. Reviewed existing rank order and "
-                             "developed new search rank order approach.\n",
+                             "developed new search rank order approach.",
                              "Biomedical Imaging - Developed a semi-automatic image mosaic program based on SIFT "
-                             "algorithm (using Matlab)\n",
-                             "------------------------------\n",
-                             "tonyl@seas.upenn.edu\n"]
+                             "algorithm (using Matlab)",
+                             "------------------------------",
+                             "tonyl@seas.upenn.edu"]
 
         test_contents = read_from_file("temp.txt")
 
@@ -45,26 +51,26 @@ class MakeWebsite_Test(unittest.TestCase):
 
     def test_detect_name(self):
         # test1: Test if it is the valid name having the leading or trailing space
-        test1 = ["   Tony Stark   \n", "This should not appear.\n"]
+        test1 = ["   Tony Stark   ", "This should not appear."]
         result = detect_name(test1)
         self.assertEqual(result, "Tony Stark")
         print()
         print("The name '{}' is valid".format(result))
 
         # test2: Test if it starts with a non-alphabetic token
-        test2 = ["22ony Stark\n", "This should not appear.\n"]
+        test2 = ["22ony Stark", "This should not appear."]
         result = detect_name(test2)
         self.assertEqual(result, "Invalid Name")
         print("The name is valid because it starts with a non-alphabetic token")
 
         # test3: Test if it's an empty name
-        test3 = ["\n", "Projects\n", "Courses\n"]
+        test3 = ["\n", "Projects", "Courses"]
         result = detect_name(test3)
         self.assertEqual(result, "Invalid Name")
         print("The name is invalid because it is empty")
 
         # test4: Test if the capital letter is in the lower case
-        test4 = ["tony Stark\n", "This should not appear.\n"]
+        test4 = ["tony Stark", "This should not appear."]
         result = detect_name(test4)
         self.assertEqual(result, "Invalid Name")
         print("The name '{}' is invalid because it starts with a lower case letter".format(test4[0]))
@@ -75,7 +81,7 @@ class MakeWebsite_Test(unittest.TestCase):
         result = detect_email(test1)
         self.assertEqual(result, "lbrandon@wharton.upenn.edu")
         # test2
-        test2 = ["lbrandon@wharton2.upenn.com\n"]
+        test2 = ["lbrandon@wharton2.upenn.com"]
         result = detect_email(test2)
         self.assertEqual(result, "")
         # test3
@@ -83,7 +89,7 @@ class MakeWebsite_Test(unittest.TestCase):
         result = detect_email(test3)
         self.assertEqual(result, "")
         # test4
-        test4 = ["lbrandon@Wharton.upenn.com\n"]
+        test4 = ["lbrandon@Wharton.upenn.com"]
         result = detect_email(test4)
         self.assertEqual(result, "")
 
@@ -142,13 +148,8 @@ class MakeWebsite_Test(unittest.TestCase):
 
     def test_surround_list_block(self):
         sample_list = ["<h2>Projects</h2>", "<ul>", "<li>built a robot</li>", "<li>fixed an ios app</li>", "</ul>"]
-        # for i in range(len(sample_list)):
-        #     sample_list[i].strip('\n')
         expect = ["<div>", "<h2>Projects</h2>", "<ul>", "<li>built a robot</li>", "<li>fixed an ios app</li>", "</ul>", "</div>"]
         self.assertEqual(expect, surround_list_block("div", sample_list))
-
-        for i in range(len(sample_list)):
-            sample_list[i].strip('\n')
 
     def test_create_email_link(self):
         # test email with @ sign
