@@ -35,67 +35,67 @@ class Expenses_Test(unittest.TestCase):
         expenses_manager = ExpensesManager()
 
         # test getting expenses based on expense type
-        self.assertAlmostEqual(12.40, expenses_manager.get_expense(self.expenses, "coffee"))
+        self.assertAlmostEqual(12.40, get_expense(self.expenses, "coffee"))
 
         # test non-existing expense types
-        self.assertEqual(None, expenses_manager.get_expense(self.expenses, "phone"))
+        self.assertEqual(None, get_expense(self.expenses, "phone"))
 
         # test both existing
-        self.assertAlmostEqual(324.0, expenses_manager.get_expense(self.expenses, "music"))
+        self.assertAlmostEqual(324.0, get_expense(self.expenses, "music"))
 
         # test non-existing expense types
-        self.assertEqual(None, expenses_manager.get_expense(self.expenses, "game"))
+        self.assertEqual(None, get_expense(self.expenses, "game"))
 
     def test_add_expense(self):
         # create instance of ExpensesManager class
         expenses_manager = ExpensesManager()
 
         # test adding a new expense
-        expenses_manager.add_expense(self.expenses, "fios", 84.5)
+        add_expense(self.expenses, "fios", 84.5)
         self.assertAlmostEqual(84.5, self.expenses.get("fios"))
 
         # test adding to existing expenses
-        expenses_manager.add_expense(self.expenses, "coffee", 15.6)
-        self.assertAlmostEqual(15.6, self.expenses.get("coffee"))
+        add_expense(self.expenses, "coffee", 15.6)
+        self.assertAlmostEqual(28, self.expenses.get("coffee"))
 
         # test adding to existing expenses
-        expenses_manager.add_expense(self.expenses, "music", 1000)
-        self.assertAlmostEqual(1000, self.expenses.get("music"))
+        add_expense(self.expenses, "music", 100)
+        self.assertAlmostEqual(424, self.expenses.get("music"))
 
     def test_deduct_expense(self):
         # create instance of ExpensesManager class
         expenses_manager = ExpensesManager()
 
         # test deducting from expense
-        expenses_manager.deduct_expense(self.expenses, "coffee", .99)
+        deduct_expense(self.expenses, "coffee", .99)
         self.assertAlmostEqual(11.41, self.expenses.get("coffee"))
 
         # test deducting from expense
-        expenses_manager.deduct_expense(self.expenses, "entertainment", 100)
+        deduct_expense(self.expenses, "entertainment", 100)
         self.assertAlmostEqual(35.62, self.expenses.get("entertainment"))
 
         # test deducting too much from expense
         with self.assertRaises(RuntimeError):
-            expenses_manager.deduct_expense(self.expenses, "music", 1000)
+            deduct_expense(self.expenses, "music", 1000)
 
         # test deducting from non-existing expense
-        self.assertEqual(None, expenses_manager.get_expense(self.expenses, "good"))
+        self.assertEqual(None, get_expense(self.expenses, "good"))
 
     def test_update_expense(self):
         # create instance of ExpensesManager class
         expenses_manager = ExpensesManager()
 
         # test updating an expense
-        expenses_manager.update_expense(self.expenses, "clothes", 19.99)
-        self.assertAlmostEqual(19.99, expenses_manager.get_expense(self.expenses, "clothes"))
+        update_expense(self.expenses, "clothes", 19.99)
+        self.assertAlmostEqual(19.99, get_expense(self.expenses, "clothes"))
 
         # test updating an expense
-        expenses_manager.update_expense(self.expenses, "food", 24.99)
-        self.assertAlmostEqual(24.99, expenses_manager.get_expense(self.expenses, "food"))
+        update_expense(self.expenses, "food", 24.99)
+        self.assertAlmostEqual(24.99, get_expense(self.expenses, "food"))
 
         # test updating a non-existing expense
-        expenses_manager.update_expense(self.expenses, "bags", 5.99)
-        self.assertEqual(None, expenses_manager.get_expense(self.expenses, "bags"))
+        update_expense(self.expenses, "bags", 5.99)
+        self.assertEqual(None, get_expense(self.expenses, "bags"))
 
     def test_sort_expenses(self):
         # create instance of ExpensesManager class
@@ -111,7 +111,7 @@ class Expenses_Test(unittest.TestCase):
                                         ('rent', 825.0)]
 
         self.assertListEqual(expense_type_sorted_expenses,
-                             expenses_manager.sort_expenses(self.expenses, "expense_type"))
+                             sort_expenses(self.expenses, "expense_type"))
 
         # TODO insert 1 additional test case
         #   Hint: Test sorting expenses by 'amount'
@@ -121,13 +121,11 @@ class Expenses_Test(unittest.TestCase):
         expenses_manager = ExpensesManager()
 
         # test export with existing expense types
-        expenses_manager.export_expenses(self.expenses, ['coffee', 'clothes'], 'export1.txt')
+        export_expenses(self.expenses, ['coffee', 'clothes'], 'export1.txt')
 
-        # TODO insert 1 additional test case
-        #   Hint: Test exporting with some non-existent expense types.
-        #   Similar to above, it is acceptable to just call export_expenses() using different inputs with a different
-        #   file to write to and just visually inspect the results. You are not required to have any assert() statements
-        #   in this test function.
+        # test exporting with some non-existent expense types
+
+        export_expenses(self.expenses, ['coffee', 'clothes', 'fruit'], 'export2.txt')
 
 
 if __name__ == '__main__':

@@ -31,7 +31,7 @@ def main():
     expenses_loader.import_expenses(expenses, 'expenses_2.txt')
 
     # for testing purposes, uncomment the following line
-    #print(expenses)
+    print(expenses)
 
     # create instance of ExpensesManager class
     expenses_manager = ExpensesManager()
@@ -68,7 +68,7 @@ def main():
                 expense_type = input('Expense type? ')
 
                 # call get_expense method in ExpensesManager class
-                print(expenses_manager.get_expense(expenses, expense_type))
+                print(get_expense(expenses, expense_type))
 
             elif (option == 2):
 
@@ -86,7 +86,7 @@ def main():
                 else:
                     # add expense
                     # call add_expense method in ExpensesManager class
-                    expenses_manager.add_expense(expenses, expense_type, amount)
+                    add_expense(expenses, expense_type, amount)
 
             elif (option == 3):
 
@@ -104,7 +104,7 @@ def main():
                 else:
                     # deduct expense
                     # call deduct_expense method in ExpensesManager class
-                    expenses_manager.deduct_expense(expenses, expense_type, amount)
+                    deduct_expense(expenses, expense_type, amount)
 
             elif (option == 4):
 
@@ -122,7 +122,7 @@ def main():
                 else:
                     # update expense
                     # call update_expense method in ExpensesManager class
-                    expenses_manager.update_expense(expenses, expense_type, amount)
+                    update_expense(expenses, expense_type, amount)
 
             elif (option == 5):
 
@@ -131,7 +131,7 @@ def main():
 
                 # sort expenses
                 # call sort_expenses method in ExpensesManager class
-                print(expenses_manager.sort_expenses(expenses, sort_type))
+                print(sort_expenses(expenses, sort_type))
 
             elif (option == 6):
 
@@ -150,7 +150,7 @@ def main():
 
                 # export expenses
                 # call export_expenses method in ExpensesManager class
-                expenses_manager.export_expenses(expenses, expense_types, file_name)
+                export_expenses(expenses, expense_types, file_name)
 
             elif (option == 0):
 

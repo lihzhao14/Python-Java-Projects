@@ -1,0 +1,2 @@
+coffee: 12.4
+clothes: 45.0
