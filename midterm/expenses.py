@@ -1,4 +1,4 @@
-'''
+"""
 This Python exam will involve implementing a system for managing expenses.  You will
 download the skeleton of the program, then implement the functions/methods.  The design of the
 program has been set up for you.
@@ -12,13 +12,13 @@ NOTE(S):
 you could fail the automated testing.
 - DO NOT change the spacing or remove any blank lines.
 - DO NOT copy/paste the text from the expenses.txt file or the expenses_2.txt file into another file.
-'''
+"""
 
 from ExpensesLoader import *
 from ExpensesManager import *
 
-def main():
 
+def main():
     # to store dictionary of expenses
     expenses = {}
 
@@ -31,7 +31,7 @@ def main():
     expenses_loader.import_expenses(expenses, 'expenses_2.txt')
 
     # for testing purposes, uncomment the following line
-    print(expenses)
+    # print(expenses)
 
     # create instance of ExpensesManager class
     expenses_manager = ExpensesManager()
@@ -68,7 +68,7 @@ def main():
                 expense_type = input('Expense type? ')
 
                 # call get_expense method in ExpensesManager class
-                print(get_expense(expenses, expense_type))
+                print(expenses_manager.get_expense(expenses, expense_type))
 
             elif (option == 2):
 
@@ -86,7 +86,7 @@ def main():
                 else:
                     # add expense
                     # call add_expense method in ExpensesManager class
-                    add_expense(expenses, expense_type, amount)
+                    expenses_manager.add_expense(expenses, expense_type, amount)
 
             elif (option == 3):
 
@@ -104,7 +104,7 @@ def main():
                 else:
                     # deduct expense
                     # call deduct_expense method in ExpensesManager class
-                    deduct_expense(expenses, expense_type, amount)
+                    expenses_manager.deduct_expense(expenses, expense_type, amount)
 
             elif (option == 4):
 
@@ -113,16 +113,16 @@ def main():
 
                 # try and get amount to update expense to
                 try:
-                   amount = float(input('Amount to update expense to? '))
+                    amount = float(input('Amount to update expense to? '))
 
                 # catch ValueError
                 except ValueError:
-                   print("Invalid amount.")
+                    print("Invalid amount.")
 
                 else:
                     # update expense
                     # call update_expense method in ExpensesManager class
-                    update_expense(expenses, expense_type, amount)
+                    expenses_manager.update_expense(expenses, expense_type, amount)
 
             elif (option == 5):
 
@@ -131,7 +131,7 @@ def main():
 
                 # sort expenses
                 # call sort_expenses method in ExpensesManager class
-                print(sort_expenses(expenses, sort_type))
+                print(expenses_manager.sort_expenses(expenses, sort_type))
 
             elif (option == 6):
 
@@ -150,7 +150,7 @@ def main():
 
                 # export expenses
                 # call export_expenses method in ExpensesManager class
-                export_expenses(expenses, expense_types, file_name)
+                expenses_manager.export_expenses(expenses, expense_types, file_name)
 
             elif (option == 0):
 

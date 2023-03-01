@@ -21,7 +21,7 @@ class ExpensesLoader(object):
 
         Note: This method will be called twice in the main function in expenses.py with the same dictionary but different files.
         """
-
+        # open file
         f = open(file, 'r')
         lines = f.readlines()
 
@@ -36,7 +36,7 @@ class ExpensesLoader(object):
             # split line into list of values (expense type and total expense amount)
             lst = line.split(':')
 
-            # Ignores expenses with missing amounts
+            # ignore expenses with missing amounts
             if len(lst) <= 1:
                 continue
 
