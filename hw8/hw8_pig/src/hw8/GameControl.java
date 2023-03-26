@@ -25,7 +25,23 @@ public class GameControl {
 	 * @param args not used
 	 */
 	public static void main(String[] args) {
-
+		Scanner sc = new Scanner (System.in);
+		System.out.println("Welcome to Pig!");
+		System.out.println();
+		// create a GameControl object
+		GameControl gc = new GameControl();
+		while (true) {
+			gc.run(sc); // call GameControl run method
+			System.out.println("--------------------");
+			System.out.println("Do you want to play again?");
+			
+			boolean check = gc.askYesNo(sc);
+			if (!check) {
+				System.out.println("Goodbye!");
+				sc.close();
+				break;
+			}
+		}
 	}
 	
 	/**
@@ -37,7 +53,21 @@ public class GameControl {
 	 * @param sc to use for getting user input
 	 */
 	public void run(Scanner sc) {
-
+		System.out.println("Please input your name");
+		String name = sc.next();
+		System.out.println("Welcome " + name);
+		createPlayers(name);
+		
+		while (true) {
+			computer.move(human, random);
+			human.move(computer, random, sc);
+			boolean check = checkWinningStatus();
+			if (check) {
+				printResults();
+				printWinner();
+				break;
+			}
+		}
 		
 	}
 	
@@ -46,8 +76,8 @@ public class GameControl {
      * @param humanName for human player
      */
 	public void createPlayers(String humanName) {
-
-		
+		this.human = new Human(humanName);	// create human player with the given humanName
+		this.computer = new Computer();
 	}
 	
 	/**
@@ -55,21 +85,36 @@ public class GameControl {
      * @return true if one player has won the game
      */
 	public boolean checkWinningStatus() {
-		
+		int computerStatus = this.computer.getScore();
+		int humanStatus = this.human.getScore();
+		if (computerStatus < 50 && humanStatus < 50) return false;
+		else if (computerStatus < 50 && humanStatus >= 50) return true;
+		else if (computerStatus >= 50 && humanStatus < 50) return true;
+		else{
+			// both of computer and human are greater than 50
+			if (computerStatus == humanStatus ) return false;
+			else return true;
+		}
 	}
 	
 	/**
 	 * Prints the final scores of the human player and computer player
 	 */
 	public void printResults() {
-
+		System.out.println("Human gets " + this.human.getScore());
+		System.out.println("Computer gets " + this.computer.getScore());
 	}
 	
 	/**
      * Determines who won the game, and prints the results
      */
 	public void printWinner() {
-
+		if (this.computer.getScore() > this.human.getScore()) {
+			System.out.println("Computer wins!");
+		}
+		else {
+			System.out.println("Human wins!");
+		}
 	}
 	
 	/**
@@ -80,8 +125,23 @@ public class GameControl {
 	 * @return true if user responds with "y" or "Y"
 	 */
 	public boolean askYesNo(Scanner sc) {
-
-		
+		boolean result;
+		while(true) {
+			String input = sc.next();
+			char answer = input.charAt(0); // take the first letter of user input
+			answer = Character.toLowerCase(answer); // make the letter lower case
+			
+			if (answer == 'y') {
+				result = true;
+				break;
+			} else if (answer == 'n') {
+				result = false;
+				break;
+			} else {
+				System.out.println("Wrong Input. Try again!");
+			}
+		}
+		return result;
 	}
 	
 }

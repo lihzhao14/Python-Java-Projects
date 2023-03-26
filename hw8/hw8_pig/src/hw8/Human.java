@@ -52,7 +52,9 @@ public class Human {
 		// initialize human's score in current round
 		int score_currentRound = 0;
 		boolean process = true;
+		System.out.println();
 		while(process){
+			
 			// roll one time for the human player randomly from score 1-6
 			int score_oneRound = random.nextInt(6) + 1;
 			System.out.println(this.name + " 's roll: " + score_oneRound);
@@ -61,9 +63,9 @@ public class Human {
 				 * If human rolls 6, the human's turn ends and return 0
 				 */
 				score_currentRound = 0;
-				System.out.println("Human's roll: " + score_oneRound);
 				System.out.println(this.name + "'s score in this round: " + score_currentRound);
 				System.out.println(this.name+ "'s total score is: "+ this.score);
+				return this.score;
 			} else if (this.score + score_oneRound + score_currentRound >= 50) {
 				/*
 				 * If the total score (including the current round's score) is greater than or equal to 50,
@@ -71,9 +73,9 @@ public class Human {
 				 */
 				score_currentRound += score_oneRound;
 				setScore(score_currentRound + this.score);
-				System.out.println("Human's roll: " + score_oneRound);
 				System.out.println(this.name + "'s score in this round: " + score_currentRound);
 				System.out.println(this.name+ "'s total score is: "+ this.score);
+				return this.score;
 			} else {
 				// accumulates the score from the current roll
 				score_currentRound += score_oneRound;
@@ -87,13 +89,12 @@ public class Human {
 			
 			if (answer == 'y') {
 				process = true;
-			} else {
+			} else if (answer == 'n') {
 				process = false;
 			}
-			
 		}
 		
-		return this.score;
+	return this.score;
 
 	}
 	
@@ -118,7 +119,7 @@ public class Human {
 	 * @param score
 	 */
 	public void setScore(int score) {
-		this.score=score;
+		this.score = score;
 	}
 	
 }
