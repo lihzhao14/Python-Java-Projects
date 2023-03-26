@@ -33,7 +33,48 @@ public class Computer {
 	 * )
 	 */
 	public int move(Human human, Random random) {
-
+		// initialize computer's score in current round
+		int score_currentRound = 0;
+		while(true){
+			// roll one time for the computer player randomly from score 1-6
+			int score_oneRound = random.nextInt(6) + 1;
+			System.out.println("Computer's roll: " + score_oneRound);
+			if (score_oneRound == 6) {
+				/*
+				 * If computer rolls 6,  the computer's turn ends and return 0
+				 */
+				score_currentRound = 0;
+				System.out.println("Computer's roll: " + score_oneRound);
+				System.out.println("Computer's score in this round is: " + score_currentRound);
+				System.out.println("Computer's total score is: " + this.score);
+				return this.score;
+			} else if (this.score + score_oneRound + score_currentRound >= 50) {
+				/*
+				 * If the total score (including the current round's score) is greater than or equal to 50,
+				 * the computer stops rolling and adds the current round's score to the total score
+				 */
+				score_currentRound += score_oneRound;
+				setScore(score_currentRound + this.score);
+				System.out.println("Computer's roll: " + score_oneRound);
+				System.out.println("Computer's score in this round is: " + score_currentRound);
+				System.out.println("Computer's total score is: " + this.score);
+				return this.score;
+			} else if (this.score + score_oneRound + score_currentRound - human.getScore() >= 5){
+				/* 
+				 * if computer score is greater than the user score plus 5,
+				 * the computer stops rolling and adds the current round's score to the total score
+				 */
+				score_currentRound += score_oneRound;
+				setScore(score_currentRound + this.score);
+				System.out.println("Computer's roll: " + score_oneRound);
+				System.out.println("Computer's score in this round is: " + score_currentRound);
+				System.out.println("Computer's total score is: " + this.score);
+				return this.score;
+			} else {
+				// accumulates the score from the current roll
+				score_currentRound += score_oneRound;
+			}
+		}
 		
 	}
 	

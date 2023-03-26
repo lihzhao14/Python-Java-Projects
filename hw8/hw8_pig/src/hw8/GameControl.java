@@ -25,22 +25,7 @@ public class GameControl {
 	 * @param args not used
 	 */
 	public static void main(String[] args) {
-		Scanner sc = new Scanner (System.in);
-		System.out.println("Welcome to Pig!");
-		
-		GameControl gc = new GameControl();
-		while (true) {
-			gc.run(sc);
-			System.out.println("--------------------");
-			System.out.println("Do you want to play again?");
-			
-			boolean check = gc.askYesNo(sc);
-			if (!check) {
-				System.out.println("Goodbye!");
-				sc.close();
-				break;
-			}
-		}
+
 	}
 	
 	/**
