@@ -49,7 +49,52 @@ public class Human {
 	 * )
 	 */
 	public int move(Computer computer, Random random, Scanner sc) {
-	
+		// initialize human's score in current round
+		int score_currentRound = 0;
+		boolean process = true;
+		while(process){
+			// roll one time for the human player randomly from score 1-6
+			int score_oneRound = random.nextInt(6) + 1;
+			System.out.println(this.name + " 's roll: " + score_oneRound);
+			if (score_oneRound == 6) {
+				/*
+				 * If human rolls 6, the human's turn ends and return 0
+				 */
+				score_currentRound = 0;
+				System.out.println("Human's roll: " + score_oneRound);
+				System.out.println(this.name + "'s score in this round: " + score_currentRound);
+				System.out.println(this.name+ "'s total score is: "+ this.score);
+			} else if (this.score + score_oneRound + score_currentRound >= 50) {
+				/*
+				 * If the total score (including the current round's score) is greater than or equal to 50,
+				 * the human stops rolling and adds the current round's score to the total score
+				 */
+				score_currentRound += score_oneRound;
+				setScore(score_currentRound + this.score);
+				System.out.println("Human's roll: " + score_oneRound);
+				System.out.println(this.name + "'s score in this round: " + score_currentRound);
+				System.out.println(this.name+ "'s total score is: "+ this.score);
+			} else {
+				// accumulates the score from the current roll
+				score_currentRound += score_oneRound;
+			}
+		
+			System.out.println("Do you want to roll again?");
+			String input = sc.next();
+			
+			char answer = input.charAt(0); // take the first letter of user input
+			answer = Character.toLowerCase(answer); // make the letter lower case
+			
+			if (answer == 'y') {
+				process = true;
+			} else {
+				process = false;
+			}
+			
+		}
+		
+		return this.score;
+
 	}
 	
 	/**
@@ -57,7 +102,7 @@ public class Human {
 	 * @return name
 	 */
 	public String getName() {
-		return name;
+		return this.name;
 	}
 
 	/**
@@ -65,7 +110,7 @@ public class Human {
 	 * @return score
 	 */
 	public int getScore() {
-
+		return this.score;
 	}
 	
 	/**
@@ -73,7 +118,7 @@ public class Human {
 	 * @param score
 	 */
 	public void setScore(int score) {
-
+		this.score=score;
 	}
 	
 }
