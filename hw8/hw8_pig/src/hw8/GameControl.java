@@ -1,3 +1,12 @@
+/**
+ *  @StudentName Lihong Zhao
+ *  @PennID: 51007389
+ *  Did you do this homework on your own (yes / no): yes
+ *  Resources used outside course materials: None
+ *  Statement: I admit that this assignment was done by me alone without help.
+ */
+
+
 package hw8;
 
 import java.util.Random;
