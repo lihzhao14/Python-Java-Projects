@@ -38,7 +38,6 @@ public class Computer {
 		while(true){
 			// roll one time for the computer player randomly from score 1-6
 			int score_oneRound = random.nextInt(6) + 1;
-			System.out.println();
 			System.out.println("Computer's roll: " + score_oneRound);
 			if (score_oneRound == 6) {
 				/*
@@ -47,6 +46,7 @@ public class Computer {
 				score_currentRound = 0;
 				System.out.println("Computer's score in this round is: " + score_currentRound);
 				System.out.println("Computer's total score is: " + this.score);
+				System.out.println();
 				return this.score;
 			} else if (this.score + score_oneRound + score_currentRound >= 50) {
 				/*
@@ -57,20 +57,22 @@ public class Computer {
 				setScore(score_currentRound + this.score);
 				System.out.println("Computer's score in this round is: " + score_currentRound);
 				System.out.println("Computer's total score is: " + this.score);
-				return this.score;
-			} else if (this.score + score_oneRound + score_currentRound - human.getScore() >= 5){
-				/* 
-				 * if computer score is greater than the user score plus 5,
-				 * the computer stops rolling and adds the current round's score to the total score
-				 */
-				score_currentRound += score_oneRound;
-				setScore(score_currentRound + this.score);
-				System.out.println("Computer's score in this round is: " + score_currentRound);
-				System.out.println("Computer's total score is: " + this.score);
+				System.out.println();
 				return this.score;
 			} else {
 				// accumulates the score from the current roll
 				score_currentRound += score_oneRound;
+				if (this.score + score_currentRound - human.getScore() >= 5){
+					/* 
+					 * if computer score is greater than the user score plus 5,
+					 * the computer stops rolling and adds the current round's score to the total score
+					 */
+					setScore(score_currentRound + this.score);
+					System.out.println("Computer's score in this round is: " + score_currentRound);
+					System.out.println("Computer's total score is: " + this.score);
+					System.out.println();
+					return this.score;
+				}
 			}
 		}
 		
