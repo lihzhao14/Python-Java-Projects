@@ -160,12 +160,20 @@ class MovieTriviaTest {
 
 	@Test
 	void testSelectWhereActorIs() {
+		// actor exists
 		assertEquals(3, mt.selectWhereActorIs("meryl streep", movieDB.getActorsInfo()).size(),
 				"The number of movies \"meryl streep\" has appeared in should be 3.");
 		assertEquals("doubt", mt.selectWhereActorIs("meryl streep", movieDB.getActorsInfo()).get(0),
 				"\"doubt\" should show up as first in the list of movies \"meryl streep\" has appeared in.");
 
 		// TODO add additional test case scenarios
+		
+		// actor exists, but no movie
+		assertEquals(0, mt.selectWhereActorIs("Brandon Krakowsky", movieDB.getActorsInfo()).size());
+		
+		// actor does not exist
+		assertEquals(0, mt.selectWhereActorIs("Jackson", movieDB.getActorsInfo()).size());
+		
 	}
 
 	@Test

@@ -144,11 +144,27 @@ public class MovieTrivia {
 	 * Given an actor, returns the list of all movies
 	 * @param actor: the name of an actor as a String
 	 * @param actorsInfo: the ArrayList to get the data from
-	 * @return the list of all movies
+	 * @return a. Given an actor, returns the list of all movies
+	 * 		   b. Given a non-existent actor, this method should return an empty list
 	 */
 	
 	public ArrayList <String> selectWhereActorIs (String actor, ArrayList <Actor> actorsInfo) {
-		
+	    // Validate actor and actorsInfo are not empty
+	    if (actor == null || actorsInfo == null) {
+	        return new ArrayList<String>();
+	    }
+	    
+	    // Trim and convert the actor name to lower case before checking
+	    String actorName = actor.trim().toLowerCase();
+	    
+	    // Check if the given actor is in actorsInfo ArrayList
+	    for (Actor actor_current : actorsInfo) {
+	        if (actor_current.getName().equals(actorName)) {
+	            return actor_current.getMoviesCast();
+	        }
+	    }
+
+	    return new ArrayList<String>();
 	}
 	
 	
