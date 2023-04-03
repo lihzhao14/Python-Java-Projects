@@ -91,7 +91,6 @@ class MovieTriviaTest {
 //		assertTrue(mt.selectWhereActorIs("meryl streep", movieDB.getActorsInfo()).contains("something new"),
 //				"After inserting Meryl Streep again with a new Movie \"     Something New     \", \"somenthing new\" should appear as one of the movies she has appeared in.");
 
-		// TODO add additional test case scenarios
 		
 
 	}
@@ -99,31 +98,62 @@ class MovieTriviaTest {
 	@Test
 	void testInsertRating() {
 
-		// try to insert new ratings for new movie
-		mt.insertRating("testmovie", new int[] { 79, 80 }, movieDB.getMoviesInfo());
+		// insert new ratings for new movie
+		mt.insertRating("testmovie", new int[] { 59, 60 }, movieDB.getMoviesInfo());
 		assertEquals(8, movieDB.getMoviesInfo().size(),
 				"After inserting ratings for a movie that is not in moviesInfo yet, the size of moviesInfo should increase by 1.");
 		assertEquals("testmovie", movieDB.getMoviesInfo().get(movieDB.getMoviesInfo().size() - 1).getName(),
 				"After inserting a rating for \"testmovie\", the name of the last movie in moviessInfo should be \"testmovie\".");
-		assertEquals(79, movieDB.getMoviesInfo().get(movieDB.getMoviesInfo().size() - 1).getCriticRating(),
+		assertEquals(59, movieDB.getMoviesInfo().get(movieDB.getMoviesInfo().size() - 1).getCriticRating(),
 				"The critics rating for \"testmovie\" is incorrect.");
-		assertEquals(80, movieDB.getMoviesInfo().get(movieDB.getMoviesInfo().size() - 1).getAudienceRating(),
+		assertEquals(60, movieDB.getMoviesInfo().get(movieDB.getMoviesInfo().size() - 1).getAudienceRating(),
 				"The audience rating for \"testmovie\" is incorrect.");
 
-		// try to insert new ratings for existing movie
-		mt.insertRating("doubt", new int[] { 100, 100 }, movieDB.getMoviesInfo());
+		// insert new ratings for existing movie
+		mt.insertRating(" doUbt   ", new int[] { 66, 77 }, movieDB.getMoviesInfo());
 		assertEquals(8, movieDB.getMoviesInfo().size(),
 				"Since \"doubt\" is already in moviesInfo, inserting ratings for it should not increase the size of moviesInfo.");
-
+		assertEquals("doubt", movieDB.getMoviesInfo().get(0).getName());
+		assertEquals(66, movieDB.getMoviesInfo().get(0).getCriticRating());
+		assertEquals(77, movieDB.getMoviesInfo().get(0).getAudienceRating());
+		
+		// rating is less than 0
+		mt.insertRating("no work", new int [] {-5, 88}, movieDB.getMoviesInfo());
+		assertEquals(8, movieDB.getMoviesInfo().size());
+		assertEquals("doubt", movieDB.getMoviesInfo().get(0).getName());
+		assertEquals(59, movieDB.getMoviesInfo().get(movieDB.getMoviesInfo().size() - 1).getCriticRating());
+		assertEquals(60, movieDB.getMoviesInfo().get(movieDB.getMoviesInfo().size() - 1).getAudienceRating());
+		
+		// rating is greater than 100
+		mt.insertRating("no work", new int [] {101, 88}, movieDB.getMoviesInfo());
+		assertEquals(8, movieDB.getMoviesInfo().size());
+		assertEquals("doubt", movieDB.getMoviesInfo().get(0).getName());
+		assertEquals(59, movieDB.getMoviesInfo().get(movieDB.getMoviesInfo().size() - 1).getCriticRating());
+		assertEquals(60, movieDB.getMoviesInfo().get(movieDB.getMoviesInfo().size() - 1).getAudienceRating());
+		
+		// ratings == null
+		mt.insertRating(" doUbt", new int [] { }, movieDB.getMoviesInfo());
+		assertEquals(8, movieDB.getMoviesInfo().size());
+		assertEquals("doubt", movieDB.getMoviesInfo().get(0).getName());
+		assertEquals(59, movieDB.getMoviesInfo().get(movieDB.getMoviesInfo().size() - 1).getCriticRating());
+		assertEquals(60, movieDB.getMoviesInfo().get(movieDB.getMoviesInfo().size() - 1).getAudienceRating());
+		
+		// ratings.length != 2
+		mt.insertRating(" doUbt", new int [] {120, 1000}, movieDB.getMoviesInfo());
+		assertEquals(8, movieDB.getMoviesInfo().size());
+		assertEquals("doubt", movieDB.getMoviesInfo().get(0).getName());
+		assertEquals(59, movieDB.getMoviesInfo().get(movieDB.getMoviesInfo().size() - 1).getCriticRating());
+		assertEquals(60, movieDB.getMoviesInfo().get(movieDB.getMoviesInfo().size() - 1).getAudienceRating());
+		
 		// look up and inspect movies based on newly inserted ratings
 		// note, this requires the use of properly implemented selectWhereRatingIs
 		// method
 		// you can comment out these two lines until you have a selectWhereRatingIs
 		// method
-		assertEquals(1, mt.selectWhereRatingIs('>', 99, true, movieDB.getMoviesInfo()).size(),
-				"After inserting a critic rating of 100 for \"doubt\", there should be 1 movie in moviesInfo with a critic rating greater than 99.");
-		assertTrue(mt.selectWhereRatingIs('>', 99, true, movieDB.getMoviesInfo()).contains("doubt"),
-				"After inserting the rating for \"doubt\", \"doubt\" should appear as a movie with critic rating greater than 99.");
+//		assertEquals(1, mt.selectWhereRatingIs('>', 99, true, movieDB.getMoviesInfo()).size(),
+//				"After inserting a critic rating of 100 for \"doubt\", there should be 1 movie in moviesInfo with a critic rating greater than 99.");
+//		assertTrue(mt.selectWhereRatingIs('>', 99, true, movieDB.getMoviesInfo()).contains("doubt"),
+//				"After inserting the rating for \"doubt\", \"doubt\" should appear as a movie with critic rating greater than 99.");
 
 		// TODO add additional test case scenarios
 	}

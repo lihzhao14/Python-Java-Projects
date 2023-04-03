@@ -65,13 +65,13 @@ public class MovieTrivia {
 	 */
 	public void insertActor (String actor, String [] movies, ArrayList <Actor> actorsInfo) {
 		
-		//make the actor name is without space and in lower case
+		// make the actor name is without space and in lower case
 	    String actor_formed = actor.trim().toLowerCase();
 	
 	    
 	    Actor targetActor = null;
 	    
-	    //check if the actor is in the actorsInfo ArrayList 
+	    // check if the actor is in the actorsInfo ArrayList 
 	    for (Actor a : actorsInfo) {
 	        if (a.getName().equals(actor_formed)) {
 	            targetActor = a;
@@ -79,19 +79,19 @@ public class MovieTrivia {
 	        }
 	    }
 	    
-	    //if not found, create a new actor
+	    // if not found, create a new actor
 	    if (targetActor == null) {
 	        targetActor = new Actor(actor_formed);
 	        actorsInfo.add(targetActor);
 	    }
 	
-	    //update the target actor's corresponding movies
+	    // update the target actor's corresponding movies
 	    for (String movie : movies) {
-	    	//make the movie name is without space and in lower case
+	    	// make the movie name is without space and in lower case
 	        String movie_formed = movie.trim().toLowerCase();
-	        //gets the moviesCast ArrayList of the current Actor object and stores it in a variable called moviesCasted
+	        // gets the moviesCast ArrayList of the current Actor object and stores it in a variable called moviesCasted
 	        ArrayList<String> moviesCasted = targetActor.getMoviesCast();
-	        //If the movie is not present in the list, it adds the movie to the list which helps prevent duplicate movies in the list
+	        // If the movie is not present in the list, it adds the movie to the list which helps prevent duplicate movies in the list
 	        if (!moviesCasted.contains(movie_formed)) {
 	            moviesCasted.add(movie_formed);
 	        }
@@ -106,7 +106,38 @@ public class MovieTrivia {
 	 */
 	
 	public void insertRating (String movie, int [] ratings, ArrayList <Movie> moviesInfo) {
-		
+	    // Validate the movie and ratings are not empty and the length of ratings is equal to 2
+	    if (movie == null || ratings == null || ratings.length != 2) {
+	        return;
+	    }
+	    
+	    // Trim and convert the movie name to lower case before checking ratings
+	    String movie_formed = movie.trim().toLowerCase();
+	    
+	    // Make sure the rating is a positive integer within two digits
+	    for (int rating : ratings) {
+	        if (rating < 0 || rating > 100) {
+	            return;
+	        }
+	    }
+
+	    // Use a flag to indicate whether a movie was found and updated
+	    boolean movieFound = false;
+
+	    for (Movie movieInfo : moviesInfo) {
+	        if (movieInfo.getName().equals(movie_formed)) {
+	            movieInfo.setCriticRating(ratings[0]);	// insert the critics rating
+	            movieInfo.setAudienceRating(ratings[1]);	// insert the audience rating
+	            movieFound = true;
+	            break; // Exit the loop once the movie has been found and updated.
+	        }
+	    }
+
+	    // If the movie was not found in the moviesInfo ArrayList, create a new Movie object and add it.
+	    if (!movieFound) {
+	        Movie newMovie = new Movie(movie_formed, ratings[0], ratings[1]);
+	        moviesInfo.add(newMovie);
+	    }
 	}
 	
 	/**
