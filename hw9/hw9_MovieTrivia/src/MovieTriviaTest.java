@@ -49,7 +49,7 @@ class MovieTriviaTest {
 	@Test
 	void testInsertActor() {
 
-		// try to insert new actor with new movies
+		// insert new actor with new movies
 		mt.insertActor("test1", new String[] { "testmovie1", "testmovie2" }, movieDB.getActorsInfo());
 		assertEquals(7, movieDB.getActorsInfo().size(),
 				"After inserting an actor, the size of actorsInfo should have increased by 1.");
@@ -61,22 +61,38 @@ class MovieTriviaTest {
 				movieDB.getActorsInfo().get(movieDB.getActorsInfo().size() - 1).getMoviesCast().get(0),
 				"\"testmovie1\" should be the first movie in test1's moviesCasted list.");
 
-		// try to insert existing actor with new movies
+		// insert existing actor with new movies
 		mt.insertActor("   Meryl STReep      ", new String[] { "   DOUBT      ", "     Something New     " },
 				movieDB.getActorsInfo());
 		assertEquals(7, movieDB.getActorsInfo().size(),
 				"Since \"meryl streep\" is already in actorsInfo, inserting \"   Meryl STReep      \" again should not increase the size of actorsInfo.");
-
+		assertEquals(4, movieDB.getActorsInfo().get(0).getMoviesCast().size());
+		
+		// insert the actor with the movie which both exist
+		mt.insertActor("meryl streep", new String [] {"Sophie's choice"}, movieDB.getActorsInfo());
+		assertEquals(7, movieDB.getActorsInfo().size());
+		assertEquals("meryl streep", movieDB.getActorsInfo().get(0).getName());
+		assertEquals(4, movieDB.getActorsInfo().get(0).getMoviesCast().size());
+		assertEquals("doubt", movieDB.getActorsInfo().get(0).getMoviesCast().get(0));
+				
+		// insert the actor with no movies
+		mt.insertActor("Jackson", new String [] {}, movieDB.getActorsInfo());
+		assertEquals(8, movieDB.getActorsInfo().size());
+		assertEquals("jackson", movieDB.getActorsInfo().get(movieDB.getActorsInfo().size() - 1).getName());
+		assertEquals(0, movieDB.getActorsInfo().get(movieDB.getActorsInfo().size() - 1).getMoviesCast().size());
+		
+				
 		// look up and inspect movies for existing actor
 		// note, this requires the use of properly implemented selectWhereActorIs method
 		// you can comment out these two lines until you have a selectWhereActorIs
 		// method
-		assertEquals(4, mt.selectWhereActorIs("meryl streep", movieDB.getActorsInfo()).size(),
-				"After inserting Meryl Streep again with 2 movies, only one of which is not on the list yet, the number of movies \"meryl streep\" appeared in should be 4.");
-		assertTrue(mt.selectWhereActorIs("meryl streep", movieDB.getActorsInfo()).contains("something new"),
-				"After inserting Meryl Streep again with a new Movie \"     Something New     \", \"somenthing new\" should appear as one of the movies she has appeared in.");
+//		assertEquals(4, mt.selectWhereActorIs("meryl streep", movieDB.getActorsInfo()).size(),
+//				"After inserting Meryl Streep again with 2 movies, only one of which is not on the list yet, the number of movies \"meryl streep\" appeared in should be 4.");
+//		assertTrue(mt.selectWhereActorIs("meryl streep", movieDB.getActorsInfo()).contains("something new"),
+//				"After inserting Meryl Streep again with a new Movie \"     Something New     \", \"somenthing new\" should appear as one of the movies she has appeared in.");
 
 		// TODO add additional test case scenarios
+		
 
 	}
 
