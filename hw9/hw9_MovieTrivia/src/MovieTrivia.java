@@ -66,37 +66,36 @@ public class MovieTrivia {
 	public void insertActor (String actor, String [] movies, ArrayList <Actor> actorsInfo) {
 		
 		//make the actor name is without space and in lower case
-		 String actor_formed = actor.trim().toLowerCase(); 
+	    String actor_formed = actor.trim().toLowerCase();
 	
-		 
-		// if the actor has been in the list, then update their corresponding movies
-		for (Actor a: actorsInfo) {
-			if (a.getName().equals(actor_formed)) {
-				// update the corresponding movies information of the actor
-				for (int i = 0; i < movies.length; i++) {
-					// gets the moviesCast ArrayList of the current Actor object and stores it in a variable called moviesCasted
-					ArrayList<String> moviesCasted = a.getMoviesCast();
-					// checks if the current movie in the loop (with trimmed and lowercase name) is already in the moviesCasted ArrayList
-					// If the movie is already in the moviesCasted ArrayList, this line skips the current iteration of the loop and moves to the next movie
-					if (moviesCasted.contains(movies[i].trim().toLowerCase())) {
-						continue;
-					} else {
-						moviesCasted.add(movies[i].trim().toLowerCase());
-					}
-				}
-				return;
-			}
-		}
-		// if the actor doesn't exist in the list, then add the new actor with their corresponding movies
-		// If the given actor was not found in the actorsInfo ArrayList, creates a new Actor object with the given actor's name (in lowercase and trimmed form)
-		Actor newActor = new Actor (actor_formed);
-		// add the new actor to the actorsInfo ArrayList
-		actorsInfo.add(newActor); 
-		// add each movie (with trimmed and lowercase name) to the moviesCast ArrayList of the new Actor object.
-		for (int i = 0; i < movies.length; i++) {
-			newActor.getMoviesCast().add(movies[i].trim().toLowerCase());	//add the new actor's movie 
-		}
-		return;
+	    
+	    Actor targetActor = null;
+	    
+	    //check if the actor is in the actorsInfo ArrayList 
+	    for (Actor a : actorsInfo) {
+	        if (a.getName().equals(actor_formed)) {
+	            targetActor = a;
+	            break;
+	        }
+	    }
+	    
+	    //if not found, create a new actor
+	    if (targetActor == null) {
+	        targetActor = new Actor(actor_formed);
+	        actorsInfo.add(targetActor);
+	    }
+	
+	    //update the target actor's corresponding movies
+	    for (String movie : movies) {
+	    	//make the movie name is without space and in lower case
+	        String movie_formed = movie.trim().toLowerCase();
+	        //gets the moviesCast ArrayList of the current Actor object and stores it in a variable called moviesCasted
+	        ArrayList<String> moviesCasted = targetActor.getMoviesCast();
+	        //If the movie is not present in the list, it adds the movie to the list which helps prevent duplicate movies in the list
+	        if (!moviesCasted.contains(movie_formed)) {
+	            moviesCasted.add(movie_formed);
+	        }
+	    }
 	}
 	
 	/**
