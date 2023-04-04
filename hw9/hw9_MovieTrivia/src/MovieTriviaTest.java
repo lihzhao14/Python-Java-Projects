@@ -314,8 +314,22 @@ class MovieTriviaTest {
 
 	@Test
 	void testGetMean() {
-		fail(); // This automatically causes the test to fail. Remove this line when you are ready to write your own tests.
 
 		// TODO add ALL test case scenarios!
+		
+		// correct calculation
+		assertEquals(67.85, mt.getMean(movieDB.getMoviesInfo())[0], 0.01);
+		assertEquals(65.71, mt.getMean(movieDB.getMoviesInfo())[1], 0.01);
+
+		// insert new movie with [0,0]
+		mt.insertRating("Talent", new int [] {0, 0}, movieDB.getMoviesInfo());
+		assertEquals(59.37, mt.getMean(movieDB.getMoviesInfo())[0], 0.01);
+		assertEquals(57.5, mt.getMean(movieDB.getMoviesInfo())[1], 0.01);
+
+		// insert new movie with [60, 60]
+		mt.insertRating("cit590", new int [] {60, 60}, movieDB.getMoviesInfo());
+		assertEquals(59.44, mt.getMean(movieDB.getMoviesInfo())[0], 0.01);
+		assertEquals(57.78, mt.getMean(movieDB.getMoviesInfo())[1], 0.01);
+
 	}
 }

@@ -410,12 +410,38 @@ public class MovieTrivia {
 	
 	
 	/**
-	 * Given the moviesInfo DB, this static method returns the mean value of the critics ratings and the audience ratings.
+	 * Given the moviesInfo DB, obtain the mean value of the critics ratings and the audience ratings.
 	 * @param moviesInfo
 	 * @return the mean value of the critics ratings and the audience ratings
 	 */
 	public static double [] getMean (ArrayList <Movie> moviesInfo) {
 		
+		// Initialize a double array to store the mean values for critics' ratings and audience ratings
+	    double[] mean = new double[2];
+
+	    // Validate the moviesInfo is null or empty
+	    if (moviesInfo == null || moviesInfo.isEmpty()) {
+	        return mean;
+	    }
+
+	    // Initialize variables to store the sum of the critics' ratings and audience ratings
+	    double sumCritics = 0;
+	    double sumAudience = 0;
+
+	    // Iterate through the moviesInfo ArrayList
+	    for (Movie movieInfo : moviesInfo) {
+	        // Add the critic rating and audience rating of each movie to the respective sums
+	        sumCritics += movieInfo.getCriticRating();
+	        sumAudience += movieInfo.getAudienceRating();
+	    }
+
+	    // Calculate the mean of the critics' ratings and audience ratings
+	    int size = moviesInfo.size();
+	    mean[0] = sumCritics / size;
+	    mean[1] = sumAudience / size;
+
+	    // Return the mean values
+	    return mean;
 	}
 	
 	
