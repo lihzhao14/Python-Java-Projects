@@ -257,6 +257,17 @@ class MovieTriviaTest {
 				"\"the post\" should be a common movie between \"tom hanks\" and \"meryl streep\".");
 
 		// TODO add additional test case scenarios
+		
+		// non-existent actors
+		assertEquals(0, mt.getCommonMovie("Jackson", "tom hanks", movieDB.getActorsInfo()).size());
+
+		// with leading or trailing whitespace
+		assertEquals(1, mt.getCommonMovie(" meryl streep ", "  tom hanks", movieDB.getActorsInfo()).size());
+		assertTrue(mt.getCommonMovie("meryl streep", "tom hanks", movieDB.getActorsInfo()).contains("the post"));
+
+		// not be case sensitive
+		assertEquals(1, mt.getCommonMovie(" Meryl Streep ", "tom hanks", movieDB.getActorsInfo()).size());
+		assertTrue(mt.getCommonMovie("meryl streep", "TOM hanks", movieDB.getActorsInfo()).contains("the post"));
 	}
 
 	@Test

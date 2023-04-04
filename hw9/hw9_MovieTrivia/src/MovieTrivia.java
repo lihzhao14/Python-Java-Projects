@@ -300,7 +300,7 @@ public class MovieTrivia {
 	
 	
 	/**
-	 * 
+	 * Obtain a list of movie names where both actors were cast.
 	 * @param actor1: actor names as Strings
 	 * @param actor2: actor names as Strings
 	 * @param actorsInfo: the ArrayList to search through
@@ -309,6 +309,34 @@ public class MovieTrivia {
 	public ArrayList <String> getCommonMovie (String actor1, String actor2, ArrayList <Actor>
 	actorsInfo) {
 		
+	    // Initialize an empty list to store the names of common movies
+	    ArrayList<String> commonMovies = new ArrayList<>();
+
+	    // Validate that actor1, actor2, and actorsInfo are not null
+	    if (actor1 == null || actor2 == null || actorsInfo == null) {
+	        return commonMovies;
+	    }
+
+	    // Get a list of all movies the first actor has acted in
+	    ArrayList<String> movies1 = selectWhereActorIs(actor1.trim().toLowerCase(), actorsInfo);
+
+	    // Get a list of all movies the second actor has acted in
+	    ArrayList<String> movies2 = selectWhereActorIs(actor2.trim().toLowerCase(), actorsInfo);
+
+	    // If either actor has not acted in any movies, return an empty list
+	    if (movies1.isEmpty() || movies2.isEmpty()) return commonMovies;
+
+	    // If both actor names are the same, return the list of movies for one of the actors
+	    if (actor1.trim().toLowerCase().equals(actor2.trim().toLowerCase())) return movies1;
+
+	    // Iterate through each movie the first actor has acted in
+	    for (String movie : movies1) {
+	        // If the second actor's list of movies contains the current movie, add the movie to the commonMovies list
+	        if (movies2.contains(movie)) commonMovies.add(movie);
+	    }
+
+	    // Return the commonMovies list containing the names of common movies where both actors were cast
+	    return commonMovies;
 	}
 	
 	
@@ -319,7 +347,10 @@ public class MovieTrivia {
 	 * @return a list of movie names that both critics and the audience have rated above 85 (>= 85)
 	 */
 	public ArrayList <String> goodMovies (ArrayList <Movie> moviesInfo) {
+
+
 		
+
 	}
 	
 	
