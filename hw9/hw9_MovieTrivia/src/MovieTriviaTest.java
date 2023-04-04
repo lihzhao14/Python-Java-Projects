@@ -299,6 +299,17 @@ class MovieTriviaTest {
 				"The actor that appeared in both \"doubt\" and \"the post\" should be \"meryl streep\".");
 
 		// TODO add additional test case scenarios
+		
+		// non-existent movie
+		assertEquals(0, mt.getCommonActors("Talent", "the post", movieDB.getActorsInfo()).size());
+
+		// movie1 and movie2 be the same
+		assertEquals(2, mt.getCommonActors("The Post", "the post", movieDB.getActorsInfo()).size());
+		assertTrue(mt.getCommonActors("The Post", "the post", movieDB.getActorsInfo()).contains("tom hanks"));
+
+		// with leading or trailing whitespace
+		assertEquals(1, mt.getCommonActors(" doubt", "the post ", movieDB.getActorsInfo()).size());
+		assertTrue(mt.getCommonActors("doubt ", " the post", movieDB.getActorsInfo()).contains("meryl streep"));
 	}
 
 	@Test

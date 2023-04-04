@@ -372,8 +372,7 @@ public class MovieTrivia {
 	
 	
 	/**
-	 * Given a pair of movies, this method returns a list of actors that acted in both
-movies.
+	 * Given a pair of movies, obtain a list of actors that acted in both movies.
 	 * @param movie1: the names of movies as Strings
 	 * @param movie2: the names of movies as Strings
 	 * @param actorsInfo: the actor ArrayList
@@ -381,7 +380,32 @@ movies.
 	 */
 	public ArrayList <String> getCommonActors (String movie1, String movie2, ArrayList <Actor>
 	actorsInfo) {
-		
+		 // Create a new ArrayList to store the result
+	    ArrayList<String> actorBoth = new ArrayList<>();
+
+	    // Check if movie1, movie2 or actorsInfo is null or empty
+	    if (movie1 == null || movie2 == null || actorsInfo == null || actorsInfo.isEmpty()) return new ArrayList<>();
+	    
+	    // Get the list of actors in each movie
+	    ArrayList<String> actors1 = selectWhereMovieIs(movie1, actorsInfo);
+	    ArrayList<String> actors2 = selectWhereMovieIs(movie2, actorsInfo);
+
+	    // Check if either of the movies has no actors
+	    if (actors1.isEmpty() || actors2.isEmpty()) return new ArrayList<>();
+
+	    // If both movies are the same, return the list of actors in movie1
+	    if (movie1.trim().toLowerCase().equals(movie2.trim().toLowerCase())) return actors1;
+
+	    // Iterate through the actors in movie1
+	    for (String actor : actors1) {
+	        // If an actor from movie1 is also in movie2, add the actor to the result list
+	        if (actors2.contains(actor)) {
+	        	actorBoth.add(actor);
+	        }
+	    }
+
+	    // Return the result ArrayList
+	    return actorBoth;
 	}
 	
 	
