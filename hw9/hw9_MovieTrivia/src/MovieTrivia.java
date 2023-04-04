@@ -6,7 +6,9 @@ import movies.Movie;
 
 /**
  * Movie trivia class providing different methods for querying and updating a movie database.
+ * @author Haojie Zheng & Lihong Zhao 
  */
+
 public class MovieTrivia {
 	
 	/**
