@@ -86,10 +86,10 @@ class MovieTriviaTest {
 		// note, this requires the use of properly implemented selectWhereActorIs method
 		// you can comment out these two lines until you have a selectWhereActorIs
 		// method
-//		assertEquals(4, mt.selectWhereActorIs("meryl streep", movieDB.getActorsInfo()).size(),
-//				"After inserting Meryl Streep again with 2 movies, only one of which is not on the list yet, the number of movies \"meryl streep\" appeared in should be 4.");
-//		assertTrue(mt.selectWhereActorIs("meryl streep", movieDB.getActorsInfo()).contains("something new"),
-//				"After inserting Meryl Streep again with a new Movie \"     Something New     \", \"somenthing new\" should appear as one of the movies she has appeared in.");
+		assertEquals(4, mt.selectWhereActorIs("meryl streep", movieDB.getActorsInfo()).size(),
+				"After inserting Meryl Streep again with 2 movies, only one of which is not on the list yet, the number of movies \"meryl streep\" appeared in should be 4.");
+		assertTrue(mt.selectWhereActorIs("meryl streep", movieDB.getActorsInfo()).contains("something new"),
+				"After inserting Meryl Streep again with a new Movie \"     Something New     \", \"somenthing new\" should appear as one of the movies she has appeared in.");
 
 		
 
@@ -155,7 +155,6 @@ class MovieTriviaTest {
 //		assertTrue(mt.selectWhereRatingIs('>', 99, true, movieDB.getMoviesInfo()).contains("doubt"),
 //				"After inserting the rating for \"doubt\", \"doubt\" should appear as a movie with critic rating greater than 99.");
 
-		// TODO add additional test case scenarios
 	}
 
 	@Test
