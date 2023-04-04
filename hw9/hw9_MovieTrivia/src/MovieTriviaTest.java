@@ -110,12 +110,12 @@ class MovieTriviaTest {
 				"The audience rating for \"testmovie\" is incorrect.");
 
 		// insert new ratings for existing movie
-		mt.insertRating(" doUbt   ", new int[] { 66, 77 }, movieDB.getMoviesInfo());
+		mt.insertRating(" doUbt   ", new int[] { 100, 100 }, movieDB.getMoviesInfo());
 		assertEquals(8, movieDB.getMoviesInfo().size(),
 				"Since \"doubt\" is already in moviesInfo, inserting ratings for it should not increase the size of moviesInfo.");
 		assertEquals("doubt", movieDB.getMoviesInfo().get(0).getName());
-		assertEquals(66, movieDB.getMoviesInfo().get(0).getCriticRating());
-		assertEquals(77, movieDB.getMoviesInfo().get(0).getAudienceRating());
+		assertEquals(100, movieDB.getMoviesInfo().get(0).getCriticRating());
+		assertEquals(100, movieDB.getMoviesInfo().get(0).getAudienceRating());
 		
 		// rating is less than 0
 		mt.insertRating("no work", new int [] {-5, 88}, movieDB.getMoviesInfo());
@@ -150,10 +150,10 @@ class MovieTriviaTest {
 		// method
 		// you can comment out these two lines until you have a selectWhereRatingIs
 		// method
-//		assertEquals(1, mt.selectWhereRatingIs('>', 99, true, movieDB.getMoviesInfo()).size(),
-//				"After inserting a critic rating of 100 for \"doubt\", there should be 1 movie in moviesInfo with a critic rating greater than 99.");
-//		assertTrue(mt.selectWhereRatingIs('>', 99, true, movieDB.getMoviesInfo()).contains("doubt"),
-//				"After inserting the rating for \"doubt\", \"doubt\" should appear as a movie with critic rating greater than 99.");
+		assertEquals(1, mt.selectWhereRatingIs('>', 99, true, movieDB.getMoviesInfo()).size(),
+				"After inserting a critic rating of 100 for \"doubt\", there should be 1 movie in moviesInfo with a critic rating greater than 99.");
+		assertTrue(mt.selectWhereRatingIs('>', 99, true, movieDB.getMoviesInfo()).contains("doubt"),
+				"After inserting the rating for \"doubt\", \"doubt\" should appear as a movie with critic rating greater than 99.");
 
 	}
 
