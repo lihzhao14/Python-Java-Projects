@@ -268,6 +268,10 @@ class MovieTriviaTest {
 		// not be case sensitive
 		assertEquals(1, mt.getCommonMovie(" Meryl Streep ", "tom hanks", movieDB.getActorsInfo()).size());
 		assertTrue(mt.getCommonMovie("meryl streep", "TOM hanks", movieDB.getActorsInfo()).contains("the post"));
+	
+		// actor1 and actor2 are the same
+		assertEquals(3, mt.getCommonMovie(" Meryl Streep ", " meryl streep", movieDB.getActorsInfo()).size());
+	
 	}
 
 	@Test
