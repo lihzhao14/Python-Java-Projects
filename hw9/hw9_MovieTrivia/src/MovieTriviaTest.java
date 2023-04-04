@@ -234,6 +234,19 @@ class MovieTriviaTest {
 				"\"amy adams\" was a co-actor of \"meryl streep\".");
 
 		// TODO add additional test case scenarios
+		
+		// non-existent actors
+		assertEquals(0, mt.getCoActors("Jackson", movieDB.getActorsInfo()).size());
+
+		// with leading or trailing whitespace
+		assertEquals(2, mt.getCoActors(" meryl streep ", movieDB.getActorsInfo()).size());
+		assertTrue(mt.getCoActors("meryl streep ", movieDB.getActorsInfo()).contains("tom hanks"));
+		assertTrue(mt.getCoActors(" meryl streep", movieDB.getActorsInfo()).contains("amy adams"));
+
+        // not be case sensitive
+		assertEquals(2, mt.getCoActors(" Meryl StrEep ", movieDB.getActorsInfo()).size());
+		assertTrue(mt.getCoActors("meryl sTreep ", movieDB.getActorsInfo()).contains("tom hanks"));
+		assertTrue(mt.getCoActors("MERYL streep", movieDB.getActorsInfo()).contains("amy adams"));
 	}
 
 	@Test

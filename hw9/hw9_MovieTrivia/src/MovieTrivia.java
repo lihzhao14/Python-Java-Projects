@@ -258,13 +258,44 @@ public class MovieTrivia {
 	
 	// More Fun Methods
 	/**
-	 * 
+	 * Obtain a list of all actors that the given actor has ever worked with in any movie except the actor herself/himself.
 	 * @param actor: the name of an actor as a String
 	 * @param actorsInfo: the ArrayList to search through
 	 * @return a list of all actors that the given actor has ever worked with in any movie except the actor herself/himself
 	 */
 	public ArrayList <String> getCoActors (String actor, ArrayList <Actor> actorsInfo) {
 		
+		// Initialize an empty list to store the names of co-actors
+	    ArrayList<String> actorCo = new ArrayList<>();
+	    
+	    // Validate that actor and actorsInfo are not null
+	    if (actor == null || actorsInfo == null) {
+	        return new ArrayList<String>();
+	    }
+	    
+	    // Trim and convert the actor name to lower case before checking
+	    String actorName = actor.trim().toLowerCase();
+	    
+	    // Get a list of all movies the given actor has acted in
+	    ArrayList<String> moviesIn = selectWhereActorIs(actorName, actorsInfo);
+	    
+	    // Iterate through each movie the given actor has acted in
+	    for (String movieIn : moviesIn) {
+	        // Get a list of all actors in the current movie
+	        ArrayList<String> actorsIn = selectWhereMovieIs(movieIn, actorsInfo);
+	        
+	        // Iterate through each actor in the current movie
+	        for (String actorIn : actorsIn) {
+	            // If the current actor is not the given actor and is not already in the res list,
+	            // add the current actor to the res list
+	            if (!actorIn.equals(actorName) && !actorCo.contains(actorIn)) {
+	            	actorCo.add(actorIn);
+	            }
+	        }
+	    }
+
+	    // Return the res list containing the names of all co-actors the given actor has worked with
+	    return actorCo;
 	}
 	
 	
