@@ -324,12 +324,17 @@ class MovieTriviaTest {
 		// insert new movie with [0,0]
 		mt.insertRating("Talent", new int [] {0, 0}, movieDB.getMoviesInfo());
 		assertEquals(59.37, mt.getMean(movieDB.getMoviesInfo())[0], 0.01);
+		
 		assertEquals(57.5, mt.getMean(movieDB.getMoviesInfo())[1], 0.01);
 
 		// insert new movie with [60, 60]
-		mt.insertRating("cit590", new int [] {60, 60}, movieDB.getMoviesInfo());
+		mt.insertRating("Marvel", new int [] {60, 60}, movieDB.getMoviesInfo());
 		assertEquals(59.44, mt.getMean(movieDB.getMoviesInfo())[0], 0.01);
 		assertEquals(57.78, mt.getMean(movieDB.getMoviesInfo())[1], 0.01);
 
+		// insert new movie with [90, 90]
+		mt.insertRating("Deer", new int [] {90, 90}, movieDB.getMoviesInfo());
+		assertEquals(62.5, mt.getMean(movieDB.getMoviesInfo())[0], 0.01);
+		assertEquals(61, mt.getMean(movieDB.getMoviesInfo())[1], 0.01);
 	}
 }
