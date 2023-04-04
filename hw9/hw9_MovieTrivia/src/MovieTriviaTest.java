@@ -282,6 +282,13 @@ class MovieTriviaTest {
 				"\"jaws\" should be considered a good movie, since it's critics and audience ratings are both greater than or equal to 85.");
 
 		// TODO add additional test case scenarios
+
+		// movie is not contained
+		assertFalse(mt.goodMovies(movieDB.getMoviesInfo()).contains("Doubt"));
+
+		// movie is contained
+		assertTrue(mt.goodMovies(movieDB.getMoviesInfo()).contains("rocky ii"));
+		assertTrue(mt.goodMovies(movieDB.getMoviesInfo()).contains("et"));
 	}
 
 	@Test

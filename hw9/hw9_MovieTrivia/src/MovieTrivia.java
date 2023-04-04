@@ -342,14 +342,30 @@ public class MovieTrivia {
 	
 	
 	/**
-	 * 
+	 * Obtain a list of movie names that both critics and the audience have rated above 85 (>= 85).
 	 * @param moviesInfo
 	 * @return a list of movie names that both critics and the audience have rated above 85 (>= 85)
 	 */
 	public ArrayList <String> goodMovies (ArrayList <Movie> moviesInfo) {
+		// Create a new ArrayList to store the result
+	    ArrayList<String> movieGreater85 = new ArrayList<>();
 
+	    // Check if moviesInfo is null or empty
+	    if (moviesInfo == null || moviesInfo.isEmpty()) {
+	        return new ArrayList<>();
+	    }
 
-		
+	    // Iterate through each movie in moviesInfo
+	    for (Movie movie : moviesInfo) {
+	        // Check if both criticRating and audienceRating are greater than or equal to 85
+	        if (movie.getCriticRating() >= 85 && movie.getAudienceRating() >= 85) {
+	            // Add the movie name to the result ArrayList
+	        	movieGreater85.add(movie.getName());
+	        }
+	    }
+
+	    // Return the result ArrayList
+	    return movieGreater85;
 
 	}
 	
