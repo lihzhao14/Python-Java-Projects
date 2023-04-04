@@ -193,7 +193,7 @@ class MovieTriviaTest {
 		assertEquals(2, mt.selectWhereMovieIs(" the post   ", movieDB.getActorsInfo()).size());
 		assertEquals(true, mt.selectWhereMovieIs("  The Post", movieDB.getActorsInfo()).contains("tom hanks"));
 		assertEquals(true, mt.selectWhereMovieIs("The Post   ", movieDB.getActorsInfo()).contains("meryl streep"));
-		assertEquals(false, mt.selectWhereMovieIs("   The Post   ", movieDB.getActorsInfo()).contains("  BraD Pitt"));
+		assertEquals(false, mt.selectWhereMovieIs("The Post   ", movieDB.getActorsInfo()).contains("  BraD Pitt"));
 	}
 
 	@Test
@@ -206,6 +206,22 @@ class MovieTriviaTest {
 				"There should be 2 movies where critics rating is less than 30.");
 
 		// TODO add additional test case scenarios
+		
+		// Non-existent comparison 
+		assertEquals(0, mt.selectWhereRatingIs('?', 0, true, movieDB.getMoviesInfo()).size());
+
+		// A targetRating that is out of range
+		assertEquals(0, mt.selectWhereRatingIs('>', 590, true, movieDB.getMoviesInfo()).size());
+
+		// Some correct comparison with the rating is from critics
+		assertEquals(5, mt.selectWhereRatingIs('>', 60, true, movieDB.getMoviesInfo()).size());
+		assertEquals(1, mt.selectWhereRatingIs('=', 91, true, movieDB.getMoviesInfo()).size());
+		assertEquals(4, mt.selectWhereRatingIs('<', 90, true, movieDB.getMoviesInfo()).size());
+		
+		// Some correct comparison with the rating is from audience
+		assertEquals(1, mt.selectWhereRatingIs('>', 90, false, movieDB.getMoviesInfo()).size());
+		assertEquals(1, mt.selectWhereRatingIs('=', 90, false, movieDB.getMoviesInfo()).size());
+		assertEquals(2, mt.selectWhereRatingIs('<', 60, false, movieDB.getMoviesInfo()).size());
 	}
 
 	@Test

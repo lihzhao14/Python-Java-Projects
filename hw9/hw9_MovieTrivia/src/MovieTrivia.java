@@ -188,7 +188,6 @@ public class MovieTrivia {
 	    for (Actor actorInfo : actorsInfo) {
 	        // Iterate over the movies in the actor's cast list.
 	        for (String movieInCast : actorInfo.getMoviesCast()) {
-	            // Use equalsIgnoreCase() for a case-insensitive comparison of the movie names.
 	            if (movieInCast.equals(movieName)) {
 	                actorsInMovie.add(actorInfo.getName());
 	                break; // Exit the inner loop once the movie is found.
@@ -213,7 +212,49 @@ public class MovieTrivia {
 	public ArrayList <String> selectWhereRatingIs (char comparison, int targetRating, boolean isCritic,
 			ArrayList <Movie> moviesInfo) {
 		
+	    ArrayList<String> movieName = new ArrayList<>();
+
+	    // Validate targetRating and check if moviesInfo is null
+	    if (targetRating < 0 || targetRating > 100 || moviesInfo == null) return new ArrayList<String>();
+	    // Validate comparison values
+	    if (comparison != '>' && comparison != '=' && comparison != '<') return new ArrayList<String>();
+
+	    for (Movie movie : moviesInfo) {
+	    	// determine whether to use the movie's critic rating or audience rating based on the isCritic boolean value
+	    	// If isCritic is true, it assigns the critic rating to the rating variable;
+	    	// otherwise, it assigns the audience rating
+	        int rating = isCritic ? movie.getCriticRating() : movie.getAudienceRating();
+
+//	        if ((comparison == '>' && rating > targetRating) || (comparison == '=' && rating == targetRating) || (comparison == '<' && rating < targetRating)) {
+//	            res.add(movie.getName());
+//	        }
+	        
+	        // Initialize a boolean variable to store the result of the comparison for each movie
+	        boolean condition = false;
+	        
+	        // Three situations of comparison 
+	        switch (comparison) {
+	            case '>':
+	                condition = rating > targetRating;
+	                break;
+	            case '=':
+	                condition = rating == targetRating;
+	                break;
+	            case '<':
+	                condition = rating < targetRating;
+	                break;
+	        }
+	        
+	        // If the condition is true, add the movie's name to the movieName list
+	        if (condition) {
+	        	movieName.add(movie.getName());
+	        }
+	    }
+	    // Return the movieName list containing the names of movies that meet the critics/audience ratings
+	    return movieName;
 	}
+	
+	
 	
 	// More Fun Methods
 	/**
