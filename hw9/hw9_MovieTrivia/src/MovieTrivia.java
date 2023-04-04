@@ -175,7 +175,27 @@ public class MovieTrivia {
 	 * @return the list of all actors in that movie
 	 */
 	public ArrayList <String> selectWhereMovieIs (String movie, ArrayList <Actor> actorsInfo) {
-		
+		// Validate movie and actorsInfo are not empty
+	    if (movie == null || actorsInfo == null) {
+	        return new ArrayList<String>();
+	    }
+	    
+    	// Trim and convert the movie name to lower case before checking
+	    String movieName = movie.trim().toLowerCase();
+	    
+	    // Create a variable named actorsInMovie which is used to store the names of all actors who appeared in the given movie
+	    ArrayList<String> actorsInMovie = new ArrayList<>();
+	    for (Actor actorInfo : actorsInfo) {
+	        // Iterate over the movies in the actor's cast list.
+	        for (String movieInCast : actorInfo.getMoviesCast()) {
+	            // Use equalsIgnoreCase() for a case-insensitive comparison of the movie names.
+	            if (movieInCast.equals(movieName)) {
+	                actorsInMovie.add(actorInfo.getName());
+	                break; // Exit the inner loop once the movie is found.
+	            }
+	        }
+	    }
+	    return actorsInMovie;
 	}
 	
 	

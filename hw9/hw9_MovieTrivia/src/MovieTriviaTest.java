@@ -185,6 +185,15 @@ class MovieTriviaTest {
 				"\"amy adams\" should be an actor who appeared in \"doubt\".");
 
 		// TODO add additional test case scenarios
+		
+		// non-existent movie
+		assertEquals(0, mt.selectWhereMovieIs("Talent", movieDB.getActorsInfo()).size());
+		
+		// Movie names do not be case sensitive
+		assertEquals(2, mt.selectWhereMovieIs(" the post   ", movieDB.getActorsInfo()).size());
+		assertEquals(true, mt.selectWhereMovieIs("  The Post", movieDB.getActorsInfo()).contains("tom hanks"));
+		assertEquals(true, mt.selectWhereMovieIs("The Post   ", movieDB.getActorsInfo()).contains("meryl streep"));
+		assertEquals(false, mt.selectWhereMovieIs("   The Post   ", movieDB.getActorsInfo()).contains("  BraD Pitt"));
 	}
 
 	@Test
