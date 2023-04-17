@@ -182,7 +182,16 @@ public abstract class Ship {
 	}
 	
 	
-	
+	/**
+	 * Returns one of the strings “battleship”, “cruiser”, “destroyer”, or “submarine”, as appropriate
+	 * Again, these types of hard-coded string values are good candidates for static final variables
+	 * 
+	 * @return
+	 */
+	@Override
+	public String getShipType() {
+		
+	}
 	
 	
 	
