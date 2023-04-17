@@ -4,5 +4,7 @@ public class Battleship extends Ship {
 	/**
 	 * Describes a ship of length 4
 	 */
-
+    public Battleship() {
+        super(4);
+    }
 }

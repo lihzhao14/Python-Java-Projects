@@ -21,7 +21,15 @@ class ShipTest {
 		assertEquals(4, ship.getLength());
 		
 		//TODO
-		//More tests
+		//Submarine
+		ship = new Submarine();
+		assertEquals(1, ship.getLength());
+		//Destroyer
+		ship = new Destroyer();
+		assertEquals(2, ship.getLength());
+		//Cruiser
+		ship = new Cruiser();
+		assertEquals(3, ship.getLength());
 	}
 
 	@Test

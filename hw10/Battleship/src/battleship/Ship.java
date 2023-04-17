@@ -16,6 +16,10 @@ public abstract class Ship {
 	public Ship(int length)	{
 		this.length = length;
 		this.hit = new boolean[4];
+//		this.hit = new boolean[length];
+//		for (int i = 0; i < length; i++) {
+//            this.hit[i] = false;
+//        }
 	}
 	
 	
@@ -32,20 +36,21 @@ public abstract class Ship {
 	
 	/**
 	 * 
-	 * @return the bow column location
+	 * @return the row corresponding to the position of the bow
 	 */
 	public int getBowRow() {
 		return this.bowRow;
 	}
 	
-	
+
 	/**
-	 * Returns the bow column location
+	 * Returns the column corresponding to the position of the bow
 	 * @return
 	 */
 	public int getBowColumn() {
 		return this.bowColumn;
 	}
+	
 	
 	/**
 	 * 
@@ -73,7 +78,7 @@ public abstract class Ship {
 	 * @param row
 	 */
 	public void setBowRow(int row) {
-		
+		this.bowRow = row;
 	}
 	
 	
@@ -83,7 +88,7 @@ public abstract class Ship {
 	 * @param column
 	 */
 	public void setBowColumn(int column) {
-		
+		this.bowColumn = column;
 	}
 	
 	/**
@@ -92,7 +97,7 @@ public abstract class Ship {
 	 * @param horizontal
 	 */
 	public void setHorizontal(boolean horizontal) {
-		
+		this.horizontal = horizontal;
 	}
 	
 	
@@ -185,6 +190,8 @@ public abstract class Ship {
 	/**
 	 * Returns one of the strings “battleship”, “cruiser”, “destroyer”, or “submarine”, as appropriate
 	 * Again, these types of hard-coded string values are good candidates for static final variables
+	 * This method can be useful for identifying what type of ship you are dealing with,
+	 * at any given point in time, and eliminates the need to use instanceof、
 	 * 
 	 * @return
 	 */

@@ -8,17 +8,17 @@ public class EmptySea extends Ship {
 	 * ocean contains a “ship” of some kind.)
 	 */
 	
-	// hard-code the ship's length and type
-		static final int length = 1;
-		static final String type = "empty";
+    public EmptySea() {
+        super(0);
+    }
 	
 	/**
 	 * This zero-argument constructor sets the length variable to 1 by calling the 
 	 * constructor in the super class
 	 */
-	public EmptySea() {
-		super(EmptySea.length);
-	}
+//	public EmptySea() {
+//		super(EmptySea.length);
+//	}
 	
 	
 	/**
@@ -57,6 +57,6 @@ public class EmptySea extends Ship {
 	 */
 	@Override
 	public String getShipType() {
-		return "empty";
+		return "Empty";
 	}
 }
