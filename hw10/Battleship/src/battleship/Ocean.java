@@ -15,18 +15,25 @@ public class Ocean {
 	
 	//The number of ships sunk (10 ships in all)
 	private int shipsSunk;
-
-    // This method returns the number of rows in the ocean grid
+	
+	//Helper functions
+    /**
+     * 
+     * @return the number of rows in the ocean grid
+     */
     public int getRows() {
         return this.ships.length;
     }
 
-    // This method returns the number of columns in the ocean grid
+    /**
+     * 
+     * @return the number of columns in the ocean grid
+     */
     public int getColumns() {
         return this.ships[0].length;
     }
 	
-	
+
 	
 	
 	

@@ -172,9 +172,8 @@ public abstract class Ship {
 	 * @param horizontal
 	 * @param ocean
 	 */
-	void placeShipAt(int row, int column, boolean horizontal, Ocean ocean) {
-		
-	}
+
+
 	
 	
 	/**
