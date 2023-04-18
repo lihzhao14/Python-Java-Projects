@@ -33,7 +33,13 @@ public class Ocean {
         return this.ships[0].length;
     }
 	
-
+    /**
+     * 
+     * @return he 2D array of Ship objects, which represents the current state of ships in the ocean
+     */
+    public Ship[][] getShips() {
+        return ships;
+    }
 	
 	
 	

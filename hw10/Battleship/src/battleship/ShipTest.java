@@ -154,7 +154,7 @@ class ShipTest {
 		
 		Ship cruiser = new Cruiser();
 		row = 5;
-		column = 9;
+		column = 5;
 		horizontal = true;
 		boolean ok2 = cruiser.okToPlaceShipAt(row, column, horizontal, ocean);
 		assertFalse(ok2, "There is already a ship here.");
@@ -204,6 +204,27 @@ class ShipTest {
 
 		//TODO
 		//More tests
+		Ship submarine = new Submarine();
+		row = 1;
+		column = 6;
+		horizontal = true;
+		submarine.placeShipAt(row, column, horizontal, ocean);
+		assertEquals(row, submarine.getBowRow());
+		assertEquals(column, submarine.getBowColumn());
+		assertTrue(submarine.isHorizontal());
+
+
+		Ship destroyer = new Destroyer();
+		row = 5;
+		column = 6;
+		horizontal = true;
+		destroyer.placeShipAt(row, column, horizontal, ocean);
+		assertEquals(row, destroyer.getBowRow());
+		assertEquals(column, destroyer.getBowColumn());
+		assertTrue(destroyer.isHorizontal());
+
+		assertEquals("empty", ocean.getShipArray()[5][4].getShipType());
+		assertEquals(destroyer, ocean.getShipArray()[5][5]);
 	}
 
 	@Test

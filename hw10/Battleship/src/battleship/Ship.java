@@ -172,7 +172,21 @@ public abstract class Ship {
 	 * @param horizontal
 	 * @param ocean
 	 */
+	void placeShipAt(int row, int column, boolean horizontal, Ocean ocean) {
+	    // Assign the ship's position and orientation
+	    this.bowRow = row;
+	    this.bowColumn = column;
+	    this.horizontal = horizontal;
 
+	    // Store the ship's reference in the ocean's ships array
+	    for (int i = 0; i < this.length; i++) {
+	        if (horizontal) {
+	            ocean.getShips()[row][column - i] = this;
+	        } else {
+	            ocean.getShips()[row - i][column] = this;
+	        }
+	    }
+    }
 
 	
 	
