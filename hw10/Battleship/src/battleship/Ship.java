@@ -15,11 +15,11 @@ public abstract class Ship {
 	 */
 	public Ship(int length)	{
 		this.length = length;
-		this.hit = new boolean[4];
-//		this.hit = new boolean[length];
-//		for (int i = 0; i < length; i++) {
-//            this.hit[i] = false;
-//        }
+//		this.hit = new boolean[4];
+		this.hit = new boolean[length];
+		for (int i = 0; i < length; i++) {
+            this.hit[i] = false;
+        }
 	}
 	
 	
@@ -129,7 +129,33 @@ public abstract class Ship {
 	 * @return
 	 */
 	boolean okToPlaceShipAt(int row, int column, boolean horizontal, Ocean ocean) {
-		
+	    // Calculate the starting row and column for checking ship placement
+	    int startRow = Math.max(row - 1, 0);
+	    int startColumn = Math.max(column - 1, 0);
+
+	    // Calculate the ending row and column for checking ship placement
+	    int endRow = horizontal ? row + 1 : row + this.length;
+	    int endColumn = horizontal ? column + this.length : column + 1;
+
+	    // Check if the ship goes beyond the ocean's bounds
+	    if (endRow > ocean.getRows() || endColumn > ocean.getColumns()) {
+	        return false;
+	    }
+
+	    // Check for overlaps and adjacent ships in the area where the ship will be placed
+	    int maxRow = Math.min(endRow, ocean.getRows());
+	    int maxColumn = Math.min(endColumn, ocean.getColumns());
+
+	    for (int i = startRow; i < maxRow; i++) {
+	        for (int j = startColumn; j < maxColumn; j++) {
+	            // If a cell in the area is occupied, return false (invalid placement)
+	            if (ocean.isOccupied(i, j)) {
+	                return false;
+	            }
+	        }
+	    }
+	    // If all conditions are met, return true (valid placement)
+	    return true;
 	}
 	
 	
@@ -195,11 +221,11 @@ public abstract class Ship {
 	 * 
 	 * @return
 	 */
-	@Override
-	public String getShipType() {
-		
-	}
-	
+//	@Override
+//	public String getShipType() {
+//		
+//	}
+//	
 	
 	
 	

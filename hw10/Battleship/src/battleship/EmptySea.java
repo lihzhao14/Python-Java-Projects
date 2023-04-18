@@ -20,7 +20,6 @@ public class EmptySea extends Ship {
 //		super(EmptySea.length);
 //	}
 	
-	
 	/**
 	 * This method overrides shootAt(int row, int column) that is inherited
 	 * from Ship, and always returns false to indicate that nothing was hit

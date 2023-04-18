@@ -15,6 +15,20 @@ public class Ocean {
 	
 	//The number of ships sunk (10 ships in all)
 	private int shipsSunk;
+
+    // This method returns the number of rows in the ocean grid
+    public int getRows() {
+        return this.ships.length;
+    }
+
+    // This method returns the number of columns in the ocean grid
+    public int getColumns() {
+        return this.ships[0].length;
+    }
+	
+	
+	
+	
 	
 	
 	//Constructor
@@ -24,7 +38,12 @@ public class Ocean {
 	 * Also initializes any game variables, such as how many shots have been fired.
 	 */
 	public Ocean() {
-		
+        // Initialize the ships array with EmptySea objects
+        for (int i = 0; i < getRows(); i++) {
+            for (int j = 0; j < getColumns(); j++) {
+                ships[i][j] = new EmptySea();
+            }
+        }
 	}
 	
 	
@@ -48,7 +67,7 @@ public class Ocean {
 	 * @return
 	 */
 	boolean isOccupied(int row, int column) {
-		
+		return !(this.ships[row][column] instanceof EmptySea);
 	}
 	
 	
@@ -110,8 +129,8 @@ public class Ocean {
 	 * 
 	 * @return the 10x10 array of Ships
 	 */
-	Ship[][] getShipArray(){
-		
+	public Ship[][] getShipArray(){
+		return this.ships;
 	}
 	
 	

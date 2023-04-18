@@ -144,6 +144,13 @@ class ShipTest {
 		
 		//TODO
 		//More tests
+		Ship submarine = new Submarine();
+		row = 2;
+		column = 5;
+		horizontal = true;
+		boolean ok1 = submarine.okToPlaceShipAt(row, column, horizontal, ocean);
+		assertTrue(ok1, "OK to place ship here.");
+		submarine.placeShipAt(row, column, horizontal, ocean);
 	}
 	
 	@Test
