@@ -1,11 +1,20 @@
+/*
+ * Class Ship
+ * 
+ * Superclass of different kind of ships
+ * 
+ * @author Haojie Zheng & Lihong Zhao
+ */
+
 package battleship;
 
 public abstract class Ship {
-	private int bowRow;	//The row that contains the bow (front part of the ship)
-	private int bowColumn;	//The column that contains the bow (front part of the ship)
-	private int length;	//The length of the ship
-	private boolean horizontal;	//A boolean that represents whether the ship is going to be placed horizontally or vertically
-	private boolean[] hit;	//An array of booleans that indicate whether that part of the ship has been hit or not
+	// Variables of Ship
+	private int bowRow;			//The row that contains the bow (front part of the ship)
+	private int bowColumn; 		//The column that contains the bow (front part of the ship)
+	private int length; 		//The length of the ship
+	private boolean horizontal; //A boolean that represents whether the ship is going to be placed horizontally or vertically
+	private boolean[] hit; 		//An array of booleans that indicate whether that part of the ship has been hit or not
 	
 	/**
 	 * This constructor sets the length property of the particular ship and initializes
@@ -13,81 +22,80 @@ public abstract class Ship {
 	 * 
 	 * @param length
 	 */
-	public Ship(int length)	{
+	public Ship(int length)
+	{
 		this.length = length;
-//		this.hit = new boolean[4];
 		this.hit = new boolean[length];
-		for (int i = 0; i < length; i++) {
-            this.hit[i] = false;
-        }
+		for(int i=0; i<length; i=i+1) {
+			hit[i] = false;
+		}
 	}
 	
-	
-	
-	//Getters
+	// Getters of Ship
 	/**
 	 * 
 	 * @return the ship length
 	 */
-	public int getLength() {
-		return this.length;
+	public int getLength()
+	{
+		return length;
 	}
-	
 	
 	/**
 	 * 
 	 * @return the row corresponding to the position of the bow
 	 */
-	public int getBowRow() {
-		return this.bowRow;
+	public int getBowRow()
+	{
+		return bowRow;
 	}
 	
-
 	/**
 	 * Returns the column corresponding to the position of the bow
 	 * @return
 	 */
-	public int getBowColumn() {
-		return this.bowColumn;
+	public int getBowColumn() 
+	{
+		return bowColumn;
 	}
-	
 	
 	/**
 	 * 
 	 * @return the hit array
 	 */
-	public boolean[] getHit() {
-		return this.hit;
+	public boolean[] getHit()
+	{
+		return hit;
 	}
-
 	
 	/**
 	 * 
 	 * @return whether the ship is horizontal (true) or not (false)
 	 */
-	public boolean isHorizontal() {
-		return this.horizontal;
+	public boolean isHorizontal()
+	{
+		return horizontal;
 	}
 	
 	
-	
-	// Setters
+	// Setters of Ship
 	/**
 	 * Sets the value of bowRow
 	 * 
 	 * @param row
 	 */
-	public void setBowRow(int row) {
+	public void setBowRow(int row)
+	{
 		this.bowRow = row;
 	}
-	
 	
 	/**
 	 * Sets the value of bowColumn
 	 * 
 	 * @param column
 	 */
-	public void setBowColumn(int column) {
+	public void setBowColumn(int column)
+	{
 		this.bowColumn = column;
 	}
 	
@@ -96,11 +104,10 @@ public abstract class Ship {
 	 * 
 	 * @param horizontal
 	 */
-	public void setHorizontal(boolean horizontal) {
+	public void setHorizontal(boolean horizontal)
+	{
 		this.horizontal = horizontal;
 	}
-	
-	
 	
 	//Abstract Methods
 	/**
@@ -112,15 +119,9 @@ public abstract class Ship {
 	public abstract String getShipType();
 	
 	
-	
 	//Other Methods
 	/**
-	 * Based on the given row, column, and orientation,
-	 * returns true if it is okay to put a ship of this length with its bow in this location;
-	 * false otherwise. 
-	 * The ship must not overlap another ship, or touch another ship (vertically, horizontally, 
-	 * or diagonally)
-	 * it must not ”stick out” beyond the array. Does not actually change either the ship or the Ocean
+	 * Determine if it is legal to put ship on specific place
 	 * 
 	 * @param row
 	 * @param column
@@ -128,90 +129,137 @@ public abstract class Ship {
 	 * @param ocean
 	 * @return
 	 */
-	boolean okToPlaceShipAt(int row, int column, boolean horizontal, Ocean ocean) {
-	    // Calculate the starting row and column for checking ship placement
-	    int startRow = Math.max(row - 1, 0);
-	    int startColumn = Math.max(column - 1, 0);
-
-	    // Calculate the ending row and column for checking ship placement
-	    int endRow = horizontal ? row + 1 : row + this.length;
-	    int endColumn = horizontal ? column + this.length : column + 1;
-
-	    // Check if the ship goes beyond the ocean's bounds
-	    if (endRow > ocean.getRows() || endColumn > ocean.getColumns()) {
-	        return false;
-	    }
-
-	    // Check for overlaps and adjacent ships in the area where the ship will be placed
-	    int maxRow = Math.min(endRow, ocean.getRows());
-	    int maxColumn = Math.min(endColumn, ocean.getColumns());
-
-	    for (int i = startRow; i < maxRow; i++) {
-	        for (int j = startColumn; j < maxColumn; j++) {
-	            // If a cell in the area is occupied, return false (invalid placement)
-	            if (ocean.isOccupied(i, j)) {
-	                return false;
-	            }
-	        }
-	    }
-	    // If all conditions are met, return true (valid placement)
-	    return true;
+	boolean okToPlaceShipAt(int row, int column, boolean horizontal, Ocean ocean) 
+	{
+		Ship[][] ships = ocean.getShipArray();
+		
+		// horizontal case
+		if(horizontal == true) {
+			// first determine if the row or column is out of range
+			if(row < 0 || row >= 10) {
+				return false;
+			}
+			for(int i = 0; i < this.length; i++) {
+				if(column+i < 0 || column+i >= 10){
+					return false;
+				}
+			}
+			
+			// the places this ship should be placed on and its neighbor should be emptySea
+			for(int startRow = row - 1; startRow <= row + 1; startRow++) {
+				for(int startColumn = column - 1; startColumn <= column + this.length+1; startColumn++){
+					if(startRow >= 0 && startColumn >= 0 && startColumn < 10 && startRow < 10 ) {
+						Ship testShip = ships[startRow][startColumn];
+						if(!(testShip instanceof EmptySea)) {
+							return false;
+						}
+					}
+				}
+			}
+		}
+		
+		// vertical case
+		if(horizontal == false) {
+			// first determine if the row or column is out of range
+			if(column < 0 || column >= 10) {
+				return false;
+			}
+			for(int i = 0; i < this.length; i++) {
+				if(row+i < 0 || row+i >= 10){
+					return false;
+				}
+			}
+			
+			// the places this ship should be placed on and its neighbor should be emptySea
+			for(int startRow = row - 1; startRow <= row+1+this.length; startRow++) {
+				for(int startColumn = column - 1; startColumn <= column + 1; startColumn++){
+					if(startRow >= 0 && startColumn >= 0 && startColumn < 10 && startRow < 10 ) {
+						Ship testShip = ships[startRow][startColumn];
+						if(!(testShip instanceof EmptySea)) {
+							return false;
+						}
+					}
+				}
+			}
+		}
+		
+		return true;
+		
 	}
 	
-	
 	/**
-	 * “Puts” the ship in the ocean. This involves giving values to the bowRow,
-	 * bowColumn, and horizontal instance variables in the ship, and it also involves
-	 * putting a reference to the ship in each of 1 or more locations (up to 4) in the ships
-	 * array in the Ocean object.
-	 * Note: This will be as many as four identical references; 
-	 * you can’t refer to a ”part” of a ship, only to the whole ship.
+	 * place the ship on the ocean based on row column and horizontal
 	 * 
 	 * @param row
 	 * @param column
 	 * @param horizontal
 	 * @param ocean
 	 */
-	void placeShipAt(int row, int column, boolean horizontal, Ocean ocean) {
-	    // Assign the ship's position and orientation
-	    this.bowRow = row;
-	    this.bowColumn = column;
-	    this.horizontal = horizontal;
-
-	    // Store the ship's reference in the ocean's ships array
-	    for (int i = 0; i < this.length; i++) {
-	        if (horizontal) {
-	            ocean.getShips()[row][column - i] = this;
-	        } else {
-	            ocean.getShips()[row - i][column] = this;
-	        }
-	    }
-    }
-
-	
+	void placeShipAt(int row, int column, boolean horizontal, Ocean ocean)
+	{
+		this.setBowRow(row);
+		this.setBowColumn(column);
+		this.setHorizontal(horizontal);
+		
+		if(horizontal == true){
+			for(int i = 0; i < length; i++) {
+				ocean.getShipArray()[row][column+i] = this;
+			}
+		}
+		else {
+			for(int j = 0; j < length; j++) {
+				ocean.getShipArray()[row+j][column] = this;
+			}
+		}
+	}
 	
 	/**
-	 * If a part of the ship occupies the given row and column, and the ship hasn’t been
-	 * sunk, mark that part of the ship as “hit” (in the hit array, index 0 indicates the
-	 * bow) and return true; otherwise return false.
+	 * If part of the ship is hit
 	 * 
 	 * @param row
 	 * @param column
 	 * @return
 	 */
-	boolean shootAt(int row, int column) {
+	boolean shootAt(int row, int column)
+	{
+		// horizontal case
+		if(horizontal == true){
+			if(row == this.bowRow && column >= this.bowColumn && column <= this.bowColumn+this.length-1) {
+				hit[column-this.bowColumn] = true;
+				return true;
+			}
+		}
+		else {
+			if(column == this.bowColumn && row >= this.bowRow && row <= this.bowRow+this.length-1) {
+				hit[row-this.bowRow] = true;
+				return true;
+			}
+		}
 		
+		return false;
 	}
-	
 	
 	/**
-	 * Return true if every part of the ship has been hit, false otherwise
+	 * Determine if the ship is sunk
+	 * 
 	 * @return
 	 */
-	boolean isSunk() {
+	boolean isSunk()
+	{
+		int hitCount = 0; 
+		for(int i = 0; i < this.length; i++) {
+			if(hit[i] == true) {
+				hitCount++;
+			}
+		}
 		
+		if(hitCount == this.length) {
+			return true;
+		}
+		else {
+			return false;
+		}
 	}
-	
 	
 	/**
 	 * Returns a single-character String to use in the Ocean’s print method
@@ -221,47 +269,16 @@ public abstract class Ship {
 	 * behaves exactly the same for all ship types, it is placed here in the Ship class.
 	 */
 	@Override
-	public String toString() {
-		
+	public String toString()
+	{
+		String str;
+		if(this.isSunk()) {
+			str = "s";
+		}
+		else {
+			str = "x";
+		}
+		return str;
 	}
-	
-	
-	/**
-	 * Returns one of the strings “battleship”, “cruiser”, “destroyer”, or “submarine”, as appropriate
-	 * Again, these types of hard-coded string values are good candidates for static final variables
-	 * This method can be useful for identifying what type of ship you are dealing with,
-	 * at any given point in time, and eliminates the need to use instanceof、
-	 * 
-	 * @return
-	 */
-//	@Override
-//	public String getShipType() {
-//		
-//	}
-//	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+
 }
-	

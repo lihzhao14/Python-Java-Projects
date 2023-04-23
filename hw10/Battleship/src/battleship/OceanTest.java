@@ -1,3 +1,8 @@
+/**
+ * Ocean Class Test
+ * @author Haojie Zheng & Lihong Zhao
+ */
+
 package battleship;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -121,6 +126,17 @@ class OceanTest {
 		
 		//TODO
 		//More tests
+		// place a battleship on the ocean
+		Ship battleship = new Battleship();
+		battleship.placeShipAt(7, 1, true, ocean);
+		// see if these places are occupied
+		assertTrue(ocean.isOccupied(0, 0));
+		assertTrue(ocean.isOccupied(7, 1));
+		assertTrue(ocean.isOccupied(7, 3));
+		assertFalse(ocean.isOccupied(6, 3));
+		assertFalse(ocean.isOccupied(9, 9));
+
+		
 	}
 
 	@Test
@@ -136,10 +152,28 @@ class OceanTest {
 		
 		assertTrue(ocean.shootAt(1, 5));
 		assertFalse(destroyer.isSunk());
-		assertTrue(ocean.shootAt(0, 5));
+		assertTrue(ocean.shootAt(2, 5));
 		
 		//TODO
 		//More tests
+		
+		// after second shot see if destroyer is sunk
+		assertTrue(destroyer.isSunk());
+		
+		// place a battleship on the ocean
+	    Ship battleship = new Battleship();
+	    battleship.placeShipAt(5, 5, true, ocean);
+	    // shot several times until it sinks
+		assertTrue(ocean.shootAt(5, 5));
+		assertFalse(battleship.isSunk());
+		assertTrue(ocean.shootAt(5, 6));
+		assertFalse(battleship.isSunk());
+		assertTrue(ocean.shootAt(5, 7));
+		assertFalse(battleship.isSunk());
+		assertTrue(ocean.shootAt(5, 8));
+		assertTrue(battleship.isSunk());
+
+
 	}
 
 	@Test
@@ -166,12 +200,31 @@ class OceanTest {
 		
 		assertTrue(ocean.shootAt(1, 5));
 		assertFalse(destroyer.isSunk());
-		assertTrue(ocean.shootAt(0, 5));
+		assertTrue(ocean.shootAt(2, 5));
 		assertTrue(destroyer.isSunk());
-		assertEquals(6, ocean.getShotsFired());
+		assertEquals(6, ocean.getShotsFired());  
 		
 		//TODO
 		//More tests
+		// place a battleship on the ocean
+		Ship battleship = new Battleship();
+		battleship.placeShipAt(5, 5, true, ocean);
+		// shot several times missed
+		assertFalse(ocean.shootAt(3, 5));
+		assertFalse(ocean.shootAt(4, 5));
+		// see if the count of shots fired works
+		assertEquals(8, ocean.getShotsFired());  
+		
+		// shot several times on target
+		assertTrue(ocean.shootAt(5, 5));
+		assertTrue(ocean.shootAt(5, 6));
+		assertTrue(ocean.shootAt(5, 7));
+		assertTrue(ocean.shootAt(5, 8));
+		assertTrue(destroyer.isSunk());
+		// see if the count of shots fired works
+		assertEquals(12, ocean.getShotsFired());  
+
+
 	}
 
 	@Test
@@ -189,6 +242,19 @@ class OceanTest {
 		
 		//TODO
 		//More tests
+		// place a battleship on the ocean
+		Ship battleship = new Battleship();
+		battleship.placeShipAt(5, 5, true, ocean);
+		// shot several times, both missed and on target
+		assertTrue(ocean.shootAt(5, 5));
+		assertFalse(battleship.isSunk());
+		assertTrue(ocean.shootAt(5, 6));
+		assertTrue(ocean.shootAt(5, 7));
+		assertTrue(ocean.shootAt(5, 8));	
+		assertTrue(battleship.isSunk());
+		// see if the count of hits works
+		assertEquals(5, ocean.getHitCount());
+		
 	}
 	
 	@Test
@@ -207,6 +273,24 @@ class OceanTest {
 		
 		//TODO
 		//More tests
+		// add a battleship on the ocean
+		Ship battleship = new Battleship();
+		battleship.placeShipAt(5, 5, true, ocean);
+		// if shots fire works for the battleship
+		assertTrue(ocean.shootAt(5, 5));
+		assertFalse(battleship.isSunk());
+		assertTrue(ocean.shootAt(5, 6));
+		assertTrue(ocean.shootAt(5, 7));
+		assertTrue(ocean.shootAt(5, 8));	
+		assertTrue(battleship.isSunk());
+		// after 4 shots see if it is sunk
+		assertEquals(1, ocean.getShipsSunk());
+		// shot the given destroyer to see if it is sunk
+		assertTrue(ocean.shootAt(2, 5));
+		assertEquals(2, ocean.getShipsSunk());
+
+		
+
 	}
 
 	@Test
@@ -220,6 +304,46 @@ class OceanTest {
 		
 		//TODO
 		//More tests
+		// add a horizontal battleship on 5,5
+		Ship battleship = new Battleship();
+		battleship.placeShipAt(5, 5, true, ocean);
+		// test the place of battleship
+		assertEquals("battleship", shipArray[5][5].getShipType());
+		assertEquals("battleship", shipArray[5][6].getShipType());
+		assertEquals("battleship", shipArray[5][7].getShipType());
+		assertEquals("battleship", shipArray[5][8].getShipType());
+		assertEquals("empty", shipArray[5][9].getShipType());
+		
+		// add another submarine to test these places
+		Ship submarine = new Submarine();
+		submarine.placeShipAt(7, 7, true, ocean);
+		assertEquals("empty", shipArray[7][8].getShipType());
+		assertEquals("submarine", shipArray[7][7].getShipType());
+
+	}
+	
+	@Test
+	void testGameOver() {
+		// initialize the ocean
+		Ocean ocean = new Ocean();
+		ocean.placeAllShipsRandomly();
+		// now the game is not over yet
+		assertEquals(ocean.isGameOver(), false);
+		
+		// shoot one place and the game continues
+		ocean.shootAt(1,1);
+		assertEquals(ocean.isGameOver(), false);
+
+		
+		// shot every place on the ocean
+		for(int i = 0; i < 10; i++) {
+			for(int j = 0; j < 10; j++) {
+				ocean.shootAt(i, j);
+			}
+		}
+	    // now the game must be over
+		assertEquals(ocean.isGameOver(), true);
+
 	}
 
 }

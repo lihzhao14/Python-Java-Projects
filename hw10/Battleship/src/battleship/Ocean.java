@@ -1,151 +1,191 @@
+/**
+ * Class Ocean
+ * The environment of the game, contains a 10*10 spaces with Class Ship
+ * 
+ * @author Haojie Zheng & Lihong Zhao
+ */
 package battleship;
+import java.util.Random;
 
 public class Ocean {
-	
-	//quickly determine which ship is in any given location
-	private Ship[][]ships = new Ship[10][10];
-	
-	//The total number of shots fired by the user
+	private Ship[][] ships = new Ship[10][10];
 	private int shotsFired;
-	
-	//The number of times a shot hit a ship.
-	private int hitCount;	//If the user shoots the same part of a ship more than once, 
-							//every hit is counted, even though additional “hits” don’t do the
-							//user any good.
-	
-	//The number of ships sunk (10 ships in all)
+	private int hitCount;
 	private int shipsSunk;
+	private int[][] Records = new int[10][10];
 	
-	//Helper functions
-    /**
-     * 
-     * @return the number of rows in the ocean grid
-     */
-    public int getRows() {
-        return this.ships.length;
-    }
-
-    /**
-     * 
-     * @return the number of columns in the ocean grid
-     */
-    public int getColumns() {
-        return this.ships[0].length;
-    }
-	
-    /**
-     * 
-     * @return he 2D array of Ship objects, which represents the current state of ships in the ocean
-     */
-    public Ship[][] getShips() {
-        return ships;
-    }
-	
-	
-	
-	
-	//Constructor
 	/**
-	 * Creates an ”empty” ocean (and fills the ships array with EmptySea objects).
-	 * You could create a private helper method to do this.
-	 * Also initializes any game variables, such as how many shots have been fired.
+	 * Initialize the sea with emptySea
 	 */
 	public Ocean() {
-        // Initialize the ships array with EmptySea objects
-        for (int i = 0; i < getRows(); i++) {
-            for (int j = 0; j < getColumns(); j++) {
-                ships[i][j] = new EmptySea();
-            }
-        }
+		for(int i = 0; i < 10; i++) {
+			for(int j=0; j < 10; j++) {
+				ships[i][j] = new EmptySea();
+				ships[i][j].placeShipAt(i, j, true, this);
+			}
+		}
+		this.shotsFired = 0;
+		this.hitCount = 0;
+		this.shipsSunk = 0;
 	}
 	
-	
-	//Methods
 	/**
-	 * Place all ten ships randomly on the (initially empty) ocean.
-	 * Place larger ships before smaller ones, or you may end up with 
-	 * no legal place to put a large ship.
-	 * 
+	 * Place all ships randomly, place larger ships in advance
 	 */
-	void placeAllShipsRandomly() {
+	void placeAllShipsRandomly()
+	{
+		// Start with the biggest ship, battleship
+		Random rand = new Random();
+		int num1 = 0;
+		while(num1 < 1) {
+			Battleship battleShip = new Battleship();
+			int randRow = rand.nextInt(9);
+			int randColumn = rand.nextInt(9);
+			boolean randHorizontal = rand.nextBoolean();
+			
+			if(battleShip.okToPlaceShipAt(randRow, randColumn, randHorizontal, this)) {
+				battleShip.placeShipAt(randRow, randColumn, randHorizontal, this);
+				num1++;
+			}
+		}
 		
-
+		// Then place cruisers
+		int num2 = 0;
+		while(num2 < 2) {
+			Cruiser cruiser = new Cruiser();
+			int randRow = rand.nextInt(9);
+			int randColumn = rand.nextInt(9);
+			boolean randHorizontal = rand.nextBoolean();
+			
+			if(cruiser.okToPlaceShipAt(randRow, randColumn, randHorizontal, this)) {
+				cruiser.placeShipAt(randRow, randColumn, randHorizontal, this);
+				num2++;
+			}
+		}
+		
+		// 3 destroyer
+		int num3 = 0;
+		while(num3 < 3) {
+			Destroyer destroyer = new Destroyer();
+			int randRow = rand.nextInt(9);
+			int randColumn = rand.nextInt(9);
+			boolean randHorizontal = rand.nextBoolean();
+			
+			if(destroyer.okToPlaceShipAt(randRow, randColumn, randHorizontal, this)) {
+				destroyer.placeShipAt(randRow, randColumn, randHorizontal, this);
+				num3++;
+			}
+		}
+		
+		// 4 submarines
+		int num4 = 0;
+		while(num4 < 4) {
+			Submarine submarine = new Submarine();
+			int randRow = rand.nextInt(9);
+			int randColumn = rand.nextInt(9);
+			boolean randHorizontal = rand.nextBoolean();
+			
+			if(submarine.okToPlaceShipAt(randRow, randColumn, randHorizontal, this)) {
+				submarine.placeShipAt(randRow, randColumn, randHorizontal, this);
+				num4++;
+			}
+		}
+		
 	}
-	
 	
 	/**
 	 * Returns true if the given location contains a ship, false if it does not
+	 * 
 	 * @param row
 	 * @param column
 	 * @return
 	 */
-	boolean isOccupied(int row, int column) {
-		return !(this.ships[row][column] instanceof EmptySea);
+	boolean isOccupied(int row, int column)
+	{
+		if (row >= 0 && row < 10 && column >= 0 && column < 10) {
+			if (!(ships[row][column] instanceof EmptySea)) {
+				return true;
+			}
+		}
+
+		return false;
 	}
-	
-	
+
 	/**
 	 * Returns true if the given location contains a ”real” ship, still afloat, (not an
 	 * EmptySea), false if it does not.
+	 * 
 	 * @param row
 	 * @param column
 	 * @return
 	 */
-	boolean shootAt(int row, int column) {
+	boolean shootAt(int row, int column)
+	{
+		this.shotsFired += 1;
+		this.Records[row][column]=1;
+		if(isOccupied(row, column)) {
+			if(ships[row][column].isSunk()==false) {
+			    this.hitCount += 1;
+			    boolean flag = ships[row][column].shootAt(row, column);
+			    if(ships[row][column].isSunk()==true) {
+			    	this.shipsSunk += 1;
+			    }
+			    return flag;
+			}
+		}
 		
+		return false;
 	}
-	
 	
 	/**
 	 * Returns the number of shots fired (in the game)
 	 * @return
 	 */
-	int getShotsFired() {
-		
+	int getShotsFired()
+	{
+		return this.shotsFired;
 	}
-	
 	
 	/**
 	 * Returns the number of hits recorded (in the game).
 	 * @return
 	 */
-	int getHitCount() {
-		
+	int getHitCount()
+	{
+		return this.hitCount;
 	}
-	
 	
 	/**
 	 * Returns the number of ships sunk (in the game)
 	 * @return
 	 */
-	int getShipsSunk() {
-		
+	int getShipsSunk()
+	{
+		return this.shipsSunk;
 	}
-	
 	
 	/**
 	 * Returns true if all ships have been sunk, otherwise false
 	 * @return
 	 */
-	boolean isGameOver() {
-		
+	boolean isGameOver()
+	{
+		if(this.shipsSunk == 10) {
+			return true;
+		}
+		else {
+			return false;
+		}
 	}
 	
-	
 	/**
-	 * The methods in the Ship class that take an Ocean parameter 
-	 * need to be able to look at the contents of this array;
-	 * the placeShipAt() method even needs to modify it.
-	 * While it is undesirable to allow methods in one class to directly 
-	 * access instance variables in another class,
-	 * sometimes there is just no good alternative.
 	 * 
 	 * @return the 10x10 array of Ships
 	 */
-	public Ship[][] getShipArray(){
-		return this.ships;
+	public Ship[][] getShipArray()
+	{
+		return ships;
 	}
-	
 	
 	/**
 	 * Prints the Ocean.
@@ -159,8 +199,35 @@ public class Ocean {
 	 * This is the only method in the Ocean class that does any input/output, and it is never 
 	 * called from within the Ocean class, only from the BattleshipGame class.
 	 */
-	void print() {
-		
+	void print()
+	{
+		for (int i = 0; i < 11; i++) {
+			for (int j = 0; j < 11; j++) {
+				if(i==0) {
+					if(j==0) {
+						System.out.print(" ");
+					}
+					else {
+						System.out.print(j-1);
+					}
+				}
+				else {
+					if(j==0) {
+						System.out.print(i-1);
+					}
+					else {
+						if (Records[i-1][j-1] == 0) {
+							System.out.print(".");
+						} else {
+							System.out.print(ships[i-1][j-1].toString());
+						}
+					}
+				}
+				
+				
+			}
+			System.out.println();
+		}
 	}
 	
 	
@@ -182,7 +249,46 @@ public class Ocean {
 	 * ‘s’: Use ‘ s ’ to indicate a Submarine.
 	 * ‘ ‘: Use ‘ ’ (single space) to indicate an EmptySea.
 	 */
-	void printWithShips() {
-		
+	void printWithShips()
+	{
+		for (int i = 0; i < 11; i++) {
+			for (int j = 0; j < 11; j++) {
+				if(i==0) {
+					if(j==0) {
+						System.out.print(" ");
+					}
+					else {
+						System.out.print(j-1);
+					}
+				}
+				else {
+					if(j==0) {
+						System.out.print(i-1);
+					}
+					else {
+						if ((ships[i-1][j-1] instanceof EmptySea)) {
+							System.out.print(" ");
+						} else {
+							if(ships[i-1][j-1].getShipType()=="battleship") {
+								System.out.print("b");
+							}
+							if(ships[i-1][j-1].getShipType()=="cruiser") {
+								System.out.print("c");
+							}
+							if(ships[i-1][j-1].getShipType()=="destroyer") {
+								System.out.print("d");
+							}
+							if(ships[i-1][j-1].getShipType()=="submarine") {
+								System.out.print("s");
+							}
+						}
+					}
+				}
+				
+				
+			}
+			System.out.println();
+		}
 	}
+	
 }
