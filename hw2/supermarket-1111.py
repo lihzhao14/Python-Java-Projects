@@ -4,7 +4,7 @@ import random
 
 # unit price of a lottery ticket
 constant_lottery_unit_price = 2
-
+fgykjkkkkkkkkk
 # unit price of an apple
 constant_apple_unit_price = .99
 
