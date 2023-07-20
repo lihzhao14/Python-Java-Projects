@@ -1,4 +1,7 @@
-# Abstract
+# Design and Implementation of a Text-based Vocabulary Replacement Game in Python
+February 2023 - March 2023
+
+## Abstract
 This python project is about a game called "Pick Your Letters". This game needs two players and we will just play the user versus the computer.
 The user’s moves are decided by the user playing the game, by asking for input, and
 the computer’s moves are decided by the program.
@@ -38,3 +41,8 @@ cards in the discard pile are shuffled and moved to the main pile. Then the top 
 is turned over to start the new discard pile.
 
 ![image](https://github.com/lihzhao14/Python-Java-Projects/assets/113971230/b70ce70b-5490-4aab-9647-2a7f86e0960e)
+
+## Role
+- Developed an interactive text-based game leveraging Python's file I/O operations, proficiently handling strings and lists to efficiently manage the game's vocabulary, reading, and selection process.
+- Harnessed the power of Python's built-in 'random' module for dynamic deck shuffling functionality, significantly increasing the game's unpredictability and replay value.
+- Prioritized user experience by implementing rigorous exception handling and input validation, while also engineering a robust system for tracking game termination conditions, thereby enhancing the overall stability and reliability of the application.
